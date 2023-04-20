@@ -16,25 +16,16 @@ data$VAL <- as.factor(data$VAL)
 data$TIPO <- as.factor(data$TIPO)
 
 ##### Respuestas correctas ###
-filter(data, TR_RC == "RC", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ COND*VAL*DECADA, data=.)%>%
+filter(data, TR_RC == "RC", !VAL=="TOT", !TIPO=="TO") %>%
+  aov(value ~ COND*VAL*DECADA*TIPO, data=.)%>%
   summary()
 
-filter(data, TR_RC == "RC", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value~COND*VAL*DECADA, data=.)%>%
+filter(data, TR_RC == "RC",  !VAL=="TOT", !TIPO=="TO") %>%
+  aov(value~COND*VAL*DECADA*TIPO, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
 
-filter(data, TR_RC == "RC", TIPO=="NT", !VAL=="TOT") %>%
-  aov(value ~ COND*VAL*DECADA, data=.)%>%
-  summary()
-
-filter(data, TR_RC == "RC", TIPO=="NT", !VAL=="TOT") %>%
-  aov(value~COND*VAL*DECADA, data=.)%>%
-  tukey_hsd()%>%
-  filter(p.adj < 0.05)%>%
-  View()
 
 ##### Tiempo de reaccion ###
 

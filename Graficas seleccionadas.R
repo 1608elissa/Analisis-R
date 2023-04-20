@@ -26,6 +26,12 @@ filter(data, TR_RC == "RC", VAL=="NEU") %>%
                 position = "dodge")+
   guides(fill="none")
                 
+filter(data, TR_RC == "RC") %>%
+  summarySE(measurevar = "value", groupvars = c("COND"))%>%
+  ggplot(aes(y=value, x=COND, fill= COND)) +
+  geom_col(position = "dodge") + 
+  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
+                position = "dodge")
 
 ###### TR
 
