@@ -3,7 +3,6 @@ library(readxl)
 library(rstatix)
 library(tidyverse)
 
-
 ###### ANOVAS CON VALENCIA EMOCIONAL #####
 data <- read_xlsx("Conducta resultados.xlsx",sheet = "TR_RC")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD")) %>%
@@ -29,22 +28,12 @@ filter(data, TR_RC == "RC",  !VAL=="TOT", !TIPO=="TO") %>%
 
 ##### Tiempo de reaccion ###
 
-filter(data, TR_RC == "TR", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ COND*VAL*DECADA, data=.)%>%
+filter(data, TR_RC == "TR", !TIPO=="TO", !VAL=="TOT") %>%
+  aov(value ~ COND*VAL*DECADA*TIPO, data=.)%>%
   summary()
 
-filter(data, TR_RC == "TR", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value~COND*VAL*DECADA, data=.)%>%
-  tukey_hsd()%>%
-  filter(p.adj < 0.05)%>%
-  View()
-
-filter(data, TR_RC == "TR", TIPO=="NT", !VAL=="TOT") %>%
-  aov(value ~ COND*VAL*DECADA, data=.)%>%
-  summary()
-
-filter(data, TR_RC == "TR", TIPO=="NT", !VAL=="TOT") %>%
-  aov(value~COND*VAL*DECADA, data=.)%>%
+filter(data, TR_RC == "TR", !TIPO=="TO", !VAL=="TOT") %>%
+  aov(value ~ COND*VAL*DECADA*TIPO, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
