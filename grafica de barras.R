@@ -61,7 +61,7 @@ filter(data, TR_RC == "RC", !VAL=="TOT", !TIPO=="TO") %>%
 filter(data, TR_RC == "TR", !VAL=="TOT", !TIPO=="TO" )%>%
   view()
 
-filter(data, TR_RC == "TR", !VAL=="TOT", !TIPO=="TO" ) %>%
+filter(data, TR_RC == "TR", VAL=="TOT", TIPO=="TO" ) %>%
   summarySE(measurevar = "value", groupvars = c("DECADA"))%>%
   ggplot(aes(y=value, x=DECADA, fill= DECADA)) +
   geom_col(position = "dodge") + 
@@ -84,3 +84,14 @@ filter(data, TR_RC == "TR", !VAL=="TOT", !TIPO=="TO") %>%
   geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
                 position = "dodge")+
   guides(fill="none")
+
+
+
+
+
+filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT") %>%
+  summarySE(measurevar = "value", groupvars = c("COND","DECADA"))%>%
+  ggplot(aes(y=value, x=DECADA, fill= COND)) +
+  geom_col(position = "dodge") + 
+  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
+                position = "dodge")
