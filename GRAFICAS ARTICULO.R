@@ -146,8 +146,7 @@ filter(data1, !VAL=="TOT") %>%
   ggplot(aes(y=value, x=VAL, fill= COND)) +
   geom_col(position = "dodge") + 
   geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
-                position = "dodge")+
-  guides(fill="none")
+                position = "dodge")
 
 # GRAFICAS PARA MOVIMIENTOS OCULARES #
 
@@ -167,7 +166,7 @@ filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", EST
                 position = "dodge")+
   guides(fill="none")
 
-filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   summarySE(measurevar = "value", groupvars = c("DECADA"))%>%
   ggplot(aes(y=value, x=DECADA, fill= DECADA)) +
   geom_col(position = "dodge") + 
@@ -175,7 +174,7 @@ filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", EST
                 position = "dodge")+
   guides(fill="none")
 
-filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   summarySE(measurevar = "value", groupvars = c("DECADA"))%>%
   ggplot(aes(y=value, x=DECADA, fill= DECADA)) +
   geom_col(position = "dodge") + 

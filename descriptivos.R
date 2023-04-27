@@ -29,6 +29,10 @@ boxplot(data3$SHIPLEY_TOT~data3$DECADA)
 anova_test(SHIPLEY_TOT~DECADA, data=data3)
 anova_test(CRI_Total~DECADA, data=data3)
 anova_test(ESCOLARIDAD~DECADA, data=data3)
+anova_test(ESCOLARIDAD~DECADA, data=data3)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
 anova_test(EDAD~DECADA, data=data3)
 
 kruskal_test(MoCA~DECADA, data=data3)
