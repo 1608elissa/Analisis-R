@@ -3,7 +3,7 @@ source("summarySE.R")
 
 #### % DE RESPUESTAS CORRECTAS ####
 
-filter(data, TR_RC == "RC", !VAL=="TOT", !TIPO=="TO" ) %>%
+filter(data, TR_RC == "RC", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
   summarySE(measurevar = "value", groupvars = c("DECADA"))%>%
   ggplot(aes(y=value, x=DECADA, fill= DECADA)) +
   geom_col(position = "dodge") + 

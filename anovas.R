@@ -19,8 +19,8 @@ filter(data, TR_RC == "RC", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA, data=.)%>%
   summary()
 
-filter(data, TR_RC == "RC",  !VAL=="TOT", !TIPO=="TO") %>%
-  aov(value~COND*VAL*DECADA*TIPO, data=.)%>%
+filter(data, TR_RC == "RC", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  aov(value~COND*VAL*DECADA, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
@@ -28,12 +28,12 @@ filter(data, TR_RC == "RC",  !VAL=="TOT", !TIPO=="TO") %>%
 
 ##### Tiempo de reaccion ###
 
-filter(data, TR_RC == "TR", !TIPO=="TO", !VAL=="TOT") %>%
-  aov(value ~ COND*VAL*DECADA*TIPO, data=.)%>%
+filter(data, TR_RC == "TR", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  aov(value ~ COND*VAL*DECADA, data=.)%>%
   summary()
 
-filter(data, TR_RC == "TR", !TIPO=="TO", !VAL=="TOT") %>%
-  aov(value ~ COND*VAL*DECADA*TIPO, data=.)%>%
+filter(data, TR_RC == "TR", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  aov(value ~ COND*VAL*DECADA, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
@@ -41,20 +41,11 @@ filter(data, TR_RC == "TR", !TIPO=="TO", !VAL=="TOT") %>%
 
 #### INDICE DE EFICIENCIA INVERSA ####
 
-data <- read_xlsx("Conducta resultados.xlsx",sheet = "TR_RC_EI")%>%
-  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD")) %>%
-  separate(tip_cond_val, c("COND","EI","VAL"),
-           sep = "_")
-data$DECADA <- as.factor(data$DECADA)
-data$COND <- as.factor(data$COND)
-data$VAL <- as.factor(data$VAL)
-
-
-filter(data,!COND=="PAS",!VAL=="TOT") %>%
+filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*DECADA*VAL, data=.)%>%
   summary()
 
-filter(data, !COND=="PAS",!VAL=="TOT") %>%
+filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value~COND*DECADA*VAL, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
@@ -63,23 +54,79 @@ filter(data, !COND=="PAS",!VAL=="TOT") %>%
 
 #### D PRIMA ####
 
-data <- read_xlsx("Conducta resultados.xlsx",sheet = "D_PRIMA")%>%
+data1 <- read_xlsx("Conducta resultados.xlsx",sheet = "D_PRIMA")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD")) %>%
-  separate(tip_cond_val, c("DPRIMA","COND","TIPO","VAL"),
+  separate(tip_cond_val, c("DPRIMA","COND","VAL"),
            sep = "_")
-data$DECADA <- as.factor(data$DECADA)
-data$COND <- as.factor(data$COND)
-data$VAL <- as.factor(data$VAL)
+data1$DECADA <- as.factor(data1$DECADA)
+data1$COND <- as.factor(data1$COND)
+data1$VAL <- as.factor(data1$VAL)
 
 
-filter(data, !VAL=="TOT") %>%
+filter(data1, !VAL=="TOT") %>%
   aov(value ~ COND*DECADA*VAL, data=.)%>%
   summary()
 
-filter(data, !VAL=="TOT") %>%
+filter(data1, !VAL=="TOT") %>%
   aov(value~COND*DECADA*VAL, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
 
-tapply(data$value,)
+
+
+#### MOVIMIENTOS OCULARES ####
+
+data2 <- read_xlsx("AOI resultados.xlsx",sheet = "AMP_SUP")%>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD")) %>%
+  separate(tip_cond_val, c("MECANISM","MEDICION","CALIF","FASE","ESTIMULO","TIPO","VAL"),
+           sep = "_")
+data2$DECADA <- as.factor(data2$DECADA)
+data2$MECANISM <- as.factor(data2$MECANISM)
+data2$MEDICION <- as.factor(data2$MEDICION)
+data2$CALIF <- as.factor(data2$CALIF)
+data2$FASE <- as.factor(data2$FASE)
+data2$ESTIMULO <- as.factor(data2$ESTIMULO)
+data2$TIPO <- as.factor(data2$TIPO)
+data2$VAL <- as.factor(data2$VAL)
+
+
+filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA, data=.)%>%
+  summary()
+
+filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA, data=.)%>%
+  summary()
+
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA, data=.)%>%
+  summary()
+
+filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA, data=.)%>%
+  summary()
+
+filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()

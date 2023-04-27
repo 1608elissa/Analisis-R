@@ -4,7 +4,7 @@ library(rstatix)
 library(tidyverse)
 
 
-data3 <- read_xlsx("Demograficos.xlsx",sheet = "All")
+data3 <- read_xlsx("Demograficos.xlsx",sheet = "All_Def")
 
 
 data3$DECADA <- as.factor(data3$DECADA)
@@ -15,28 +15,19 @@ data3$IDARE_E_PUNTAJE <-as.numeric(data3$IDARE_E_PUNTAJE)
 data3$IDERE_E_PUNTAJE <-as.numeric(data3$IDERE_E_PUNTAJE)
 data3$SHIPLEY_TOT <-as.numeric(data3$SHIPLEY_TOT)
 data3$MoCA <-as.numeric(data3$MoCA)
+data3$CRI_Total <-as.numeric(data3$CRI_Total)
 
 
 anova_test(SHIPLEY_TOT~DECADA, data=data3)
+anova_test(CRI_Total~DECADA, data=data3)
 anova_test(ESCOLARIDAD~DECADA, data=data3)
 anova_test(EDAD~DECADA, data=data3)
-
-std.error(data3$SHIPLEY_TOT)
-std.error(data3$ESCOLARIDAD)
-std.error(data3$MoCA)
-std.error(data3$EDAD)
 
 kruskal_test(MoCA~DECADA, data=data3)
 kruskal_test(IDARE_R_PUNTAJE~DECADA, data=data3)
 kruskal_test(IDERE_R_PUNTAJE~DECADA, data=data3)
 kruskal_test(IDARE_E_PUNTAJE~DECADA, data=data3)
 kruskal_test(IDERE_E_PUNTAJE~DECADA, data=data3)
-
-range(data3$IDAREESTADO, na.rm = T)
-range(data3$IDARERASGO, na.rm = T)
-range(data3$IDEREESTADO, na.rm = T)
-range(data3$IDERERASGO, na.rm = T)
-
 
 
 decadas<-c("20","30","40","50","60")
@@ -48,6 +39,8 @@ for (i in decadas) {
   std.error(bases$SHIPLEY_TOT)  %>%
   print()
   std.error(bases$ESCOLARIDAD)  %>%
+  print()
+  std.error(bases$CRI_Total)  %>%
   print()
   range(bases$MoCA) %>%
   print()
@@ -70,6 +63,8 @@ for (i in decadas) {
   mean(bases$SHIPLEY_TOT)  %>%
     print()
   mean(bases$ESCOLARIDAD)  %>%
+    print()
+  mean(bases$CRI_Total)  %>%
     print()
   median(bases$MoCA) %>%
     print()
