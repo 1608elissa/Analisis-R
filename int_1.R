@@ -8,7 +8,8 @@ View(a)
 #######
 library(readxl)
 dat <- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx")
-a<-dat$AB17
+a<-dat$AB17 %>%
+  cut(15)
 
 levels(a)
 levels(a) <- seq(length(levels(a)))
