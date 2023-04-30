@@ -16,8 +16,8 @@ tab<-tibble("AB17"=a,
             "2"=dat$AB17)
 view(tab)           
 
-split(a, sort(a%%15))
 
+table(cut(a, 15) )
 
 library(openxlsx)
 
