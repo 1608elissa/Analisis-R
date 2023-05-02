@@ -113,11 +113,11 @@ data4$COND <- as.factor(data4$COND)
 data4$VAL <- as.factor(data4$VAL)
 
 
-#### GRAFICAS DE VIOLIN ####
+#### GRAFICAS DE VIOLIN RC, TR, EI, D PRIMA ####
 
-
-
-ggplot(data3, aes(x = DECADA, y = MoCA, color=DECADA)) +
+# RC # 
+filter(data, TR_RC == "RC", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
   geom_violin(alpha = 0.5) +
   geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
   theme(legend.position = "none") +
@@ -125,4 +125,214 @@ ggplot(data3, aes(x = DECADA, y = MoCA, color=DECADA)) +
   stat_summary(fun = "mean",
                geom = "crossbar", 
                width = 0.35,
-               color = "purple")
+               color = "#473C8B")
+
+filter(data, TR_RC == "RC", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = VAL, color=VAL)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data, TR_RC == "RC", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  summarySE(measurevar = "value", groupvars = c("VAL","COND"))%>%
+  ggplot(aes(y=value, x=VAL, fill= COND)) +
+  geom_col(position = "dodge") +
+  theme_classic() +
+  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
+                position = "dodge")
+
+
+# TR #
+filter(data, TR_RC == "TR", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data, TR_RC == "TR", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = COND, color=COND)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+
+# COSTO TR #
+
+filter(data5, !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+
+# EI #
+filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = COND, color=COND)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(y = value, x = VAL, color= VAL)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+
+# D PRIMA #
+filter(data1, !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data1, !VAL=="TOT") %>%
+  summarySE(measurevar = "value", groupvars = c("COND","VAL"))%>%
+  ggplot(aes(y=value, x=VAL, fill= COND)) +
+  geom_col(position = "dodge") + 
+  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
+                position = "dodge")
+
+#### GRAFICAS DE VIOLIN MOVIMIENTOS OCULARES ####
+
+# AMPLIFICACION #
+filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = VAL, color=VAL)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+# SUPRESION #
+
+filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = DECADA, color=DECADA)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+# COSTO ROSTROS - ESCENAS #
+
+filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = COND, color=COND)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
+  summarySE(measurevar = "value", groupvars = c("DECADA", "COND"))%>%
+  ggplot(aes(y=value, x=COND, fill= DECADA)) +
+  geom_col(position = "dodge") + 
+  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
+                position = "dodge")
+
+filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
+  ggplot(aes(y = value, x = COND, color=COND)) +
+  geom_violin(alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
+  summarySE(measurevar = "value", groupvars = c("DECADA", "COND"))%>%
+  ggplot(aes(y=value, x=COND, fill= DECADA)) +
+  geom_col(position = "dodge") + 
+  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
+                position = "dodge")

@@ -1,0 +1,15 @@
+IDARE / IDERE por niveles -> mejor hacer historama 
+
+Q3 + 1.5 de rango intercuartil -> para determinar outliers 
+1.5 de rango intercuartil - Q1 -> para determinar outliers 
+
+
+Gráfica de %RC condición + CRIq
+Gráfica de %RC década + IDARE / IDERE rasgo
+
+Correlaciones con los demográficos x condición rostros y escenas EI
+
+Tomar la duración de la primera fijación para los mecanismos 
+
+Correlación con covid -> 0 sin covid, 1 sin secuelas, 2 con 1 secuela, 3 con 2 secuelas y 4 con 3 secuelas 
+

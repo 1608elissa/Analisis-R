@@ -10,4 +10,5 @@ for (i in names(mod)) {
   writeDataTable(wb, i,tab)
     
 }
-openXL(wb)
+
+saveWorkbook(wb, "mineria de datos/MagiaDeSirena.xlsx", overwrite = TRUE) #guardar sin abrir
