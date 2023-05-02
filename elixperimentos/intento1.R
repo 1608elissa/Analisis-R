@@ -1,11 +1,13 @@
 library(tidyverse)
+library(magrittr)
 library(readxl)
 library(openxlsx)
 
 
-dat <- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx")
-list<- pull(read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = 2),2)
+dat <- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "conjunto_datos")
+list<- pull(read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "Sheet1"),2)
 i <- list[1:33]
+
 
 wb<-createWorkbook("cosito")
 
@@ -16,6 +18,7 @@ for (n in i) {
   a<-dat[[n]]
   
   b <- a %>%
+   
     cut(10)
   c <- b
   
@@ -34,9 +37,32 @@ for (n in i) {
 
 }
 
+
+
+for (i in 1:length(dat$AC28IMC)) {
+  
+  if (dat$AC28IMC[i]==666) {
+    dat$AC28IMC[i] <- 666
+    
+  } else if (dat$AC28IMC[i] < 18.5) {
+    
+    dat$AC28IMC[i] <- 1
+    
+  }else if (dat$AC28IMC[i] < 24.9) {
+    dat$AC28IMC[i] <- 2
+  }else if (dat$AC28IMC[i] < 29.9) {
+    dat$AC28IMC[i] <- 3
+  }else {
+    dat$AC28IMC[i] <- 4
+  }
+
+  
+}
+
+
+addWorksheet(wb,"AC28IMC")
+writeDataTable(wb,"AC28IMC" , as.tibble(dat$AC28IMC))
+
 openXL(wb) #abrir sin guardar
 saveWorkbook(wb, "labes.xlsx", overwrite = TRUE) #guardar sin abrir
-
-
-
 
