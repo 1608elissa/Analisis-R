@@ -1,9 +1,9 @@
 #librerias####
 library(tidyverse)
-
-
-#######preconstucto de tabla####
 library(readxl)
+library(openxlsx)
+#######preconstucto de tabla####
+
 dat <- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx")
 a<-dat$AB17 %>%
   cut(15)
@@ -17,7 +17,7 @@ view(tab)
 
 table(cut(a, 15) )
 
-library(openxlsx)
+
 
 wb<-createWorkbook("cosito")
 addWorksheet(wb,"labels")
