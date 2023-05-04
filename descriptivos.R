@@ -2,6 +2,7 @@ library(plotrix)
 library(readxl)
 library(rstatix)
 library(tidyverse)
+library(pgirmess)
 
 
 data3 <- read_xlsx("Junto.xlsx",sheet = "Demo")
@@ -35,6 +36,8 @@ aov(ESCOLARIDAD~DECADA, data=data3)%>%
   View()
 anova_test(EDAD~DECADA, data=data3)
 
+kruskal_test(CRI_Total_Z~DECADA, data=data3)
+kruskalmc(CRI_Total_Z~DECADA, data=data3)
 kruskal_test(MoCA~DECADA, data=data3)
 kruskalmc(MoCA~DECADA, data=data3)
 kruskal_test(IDARE_R_PUNTAJE~DECADA, data=data3)
