@@ -1,12 +1,12 @@
 mod<- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "cubetas")
-filter(mod,AD33==1) %>%
+filter(mod,AD33==1)# %>%
   view()
 
 wb<-createWorkbook("noms")
 
 for (i in names(mod)) {
 
-  tab <- as.data.frame(table(mod[i]))
+  tab <- as_tibble(table(mod[i]))
   addWorksheet(wb, i)
   writeDataTable(wb, i,tab)
     
@@ -19,13 +19,14 @@ saveWorkbook(wb, "mineria de datos/MagiaDeSirena.xlsx", overwrite = TRUE) #guard
 
 
 wb<-createWorkbook("noms")
+tab <- tibble()
 
 for (i in names(mod)) {
   
-  tab <- as.data.frame(table(mod[i]))
-  addWorksheet(wb, i)
-  writeDataTable(wb, i,tab)
-  
+  tab <- as_tibble(table(mod[i])) 
+ # bind_cols(tab,.)
+  rm(i)
 }
-
+addWorksheet(wb, "prueba1")
+writeDataTable(wb, "prueba1",tab)
 saveWorkbook(wb, "mineria de datos/MagiaDeSirena.xlsx", overwrite = TRUE) #guardar sin abrir
