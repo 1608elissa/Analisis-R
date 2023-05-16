@@ -116,7 +116,7 @@ data4$VAL <- as.factor(data4$VAL)
 #### CORRELACIONES ####
 
 # PORCENTAJE DE RESPUESTAS CORRECTAS #
-filter(data, TR_RC == "RC", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %$%
+filter(data, TR_RC == "RC", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, ESCOLARIDAD,
            method="pearson")
 filter(data, TR_RC == "RC", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %$%
@@ -222,81 +222,87 @@ filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", EST
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, MoCA,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, MoCA,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, MoCA,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, MoCA,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, MoCA,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, MoCA,
-            method="pearson")
+            method="spearman")
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, CRI_Total,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, CRI_Total,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, CRI_Total,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, CRI_Total,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, CRI_Total,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, CRI_Total,
-            method="pearson")
+            method="spearman")
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDERE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDERE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDERE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDERE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDERE_R_PUNTAJE,
-            method="pearson")
+            method="spearman")
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
   cor.test( value, IDERE_R_PUNTAJE,
+            method="spearman")
+
+
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %$%
+  cor.test( value, EDAD,
             method="pearson")
-
-
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %$%
+  cor.test( value, EDAD,
+            method="pearson")
 
 
 # RESTA ROSTROS - ESCENAS #

@@ -270,7 +270,7 @@ filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", EST
                width = 0.35,
                color = "#473C8B")
 
-filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   ggplot(aes(y = value, x = DECADA, color=DECADA)) +
   geom_violin(trim = FALSE, draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
   geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
@@ -308,7 +308,7 @@ filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", EST
                width = 0.35,
                color = "#473C8B")
 
-filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   ggplot(aes(y = value, x = DECADA, color=DECADA)) +
   geom_violin(trim = FALSE, draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
   geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
