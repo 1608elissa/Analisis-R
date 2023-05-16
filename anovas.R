@@ -6,11 +6,11 @@ library(tidyverse)
 ###### ANOVAS CON VALENCIA EMOCIONAL #####
 data <- read_xlsx("Junto.xlsx",sheet = "TR_RC_EI")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total_Z", "ENF_NEURO_FAM", "ENF_PSIC", "COVID",
+                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
                                  "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
                                  "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                  "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL", 
-                                  "SHIPLEY")) %>%
+                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
+                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
   separate(tip_cond_val, c("COND","TR_RC","TIPO", "VAL"), sep = "_")
 
 data$DECADA <- as.factor(data$DECADA)
@@ -69,11 +69,11 @@ filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
 
 data1 <- read_xlsx("Junto.xlsx",sheet = "D_PRIMA")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total_Z", "ENF_NEURO_FAM", "ENF_PSIC", "COVID",
+                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
                                  "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
                                  "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL", 
-                                 "SHIPLEY")) %>%
+                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
+                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
   separate(tip_cond_val, c("DPRIMA","COND","VAL"),
            sep = "_")
 
@@ -104,11 +104,11 @@ filter(data1, !VAL=="TOT") %>%
 
 data5 <- read_xlsx("Junto.xlsx",sheet = "Costo_TR")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total_Z", "ENF_NEURO_FAM", "ENF_PSIC", "COVID",
+                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
                                  "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
                                  "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL", 
-                                 "SHIPLEY")) %>%
+                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
+                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
   separate(tip_cond_val, c("COSTO","TR","TIPO", "VAL"),
            sep = "_")
 
@@ -141,11 +141,11 @@ filter(data5, !VAL=="TOT") %>%
 
 data2 <- read_xlsx("Junto.xlsx",sheet = "INDICES")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total_Z", "ENF_NEURO_FAM", "ENF_PSIC", "COVID",
+                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
                                  "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
                                  "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL", 
-                                 "SHIPLEY")) %>%
+                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
+                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
   separate(tip_cond_val, c("MECANISM","MEDICION","CALIF","FASE","ESTIMULO","TIPO","VAL"),
            sep = "_")
 data2$DECADA <- as.factor(data2$DECADA)
@@ -178,6 +178,16 @@ filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", EST
   filter(p.adj < 0.05)%>%
   View()
 
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA, data=.)%>%
+  summary()
+
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA, data=.)%>%
   summary()
@@ -197,16 +207,27 @@ filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", EST
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
+
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA, data=.)%>%
+  summary()
+
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
 
 # RESTAR DE ROSTROS Y ESCENAS #
 
 data4 <- read_xlsx("Junto.xlsx",sheet = "COSTO_MECANISMOS")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total_Z", "ENF_NEURO_FAM", "ENF_PSIC", "COVID",
+                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
                                  "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
                                  "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL", 
-                                 "SHIPLEY")) %>%
+                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
+                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
   separate(tip_cond_val, c("MECANISM","MEDICION","COND","VAL"),
            sep = "_")
 data4$DECADA <- as.factor(data4$DECADA)
@@ -236,6 +257,17 @@ filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
   filter(p.adj < 0.05)%>%
   View()
 
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*COND, data=.)%>%
+  summary()
+
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
+  aov(value~ VAL*DECADA*COND, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+
 ##### ANCOVAS ####
 
 # PORCENTAJE DE RESPUESTAS CORRECTAS #
@@ -246,7 +278,7 @@ filter(data, TR_RC == "RC", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data, TR_RC == "RC", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
-  aov(value ~ COND*VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ COND*VAL*DECADA*CRI_TotaL, data=.)%>%
   summary()
 filter(data, TR_RC == "RC", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
@@ -263,7 +295,7 @@ filter(data, TR_RC == "TR", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data, TR_RC == "TR", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
-  aov(value ~ COND*VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ COND*VAL*DECADA*CRI_Total, data=.)%>%
   summary()
 filter(data, TR_RC == "TR", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
@@ -280,7 +312,7 @@ filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
-  aov(value ~ COND*VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ COND*VAL*DECADA*CRI_Total, data=.)%>%
   summary()
 filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
@@ -297,7 +329,7 @@ filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
-  aov(value ~ COND*VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ COND*VAL*DECADA*CRI_Total, data=.)%>%
   summary()
 filter(data, TR_RC == "EI", !COND== "PAS", !VAL=="TOT", TIPO=="TG") %>%
   aov(value ~ COND*VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
@@ -314,7 +346,7 @@ filter(data1, !VAL=="TOT") %>%
   aov(value ~ COND*DECADA*VAL*MoCA, data=.)%>%
   summary()
 filter(data1, !VAL=="TOT") %>%
-  aov(value ~ COND*DECADA*VAL*CRI_Total_Z, data=.)%>%
+  aov(value ~ COND*DECADA*VAL*CRI_Total, data=.)%>%
   summary()
 filter(data1, !VAL=="TOT") %>%
   aov(value ~ COND*DECADA*VAL*IDARE_R_PUNTAJE, data=.)%>%
@@ -330,17 +362,29 @@ filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", EST
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*ESCOLARIDAD, data=.)%>%
   summary()
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*ESCOLARIDAD, data=.)%>%
+  summary()
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*ESCOLARIDAD, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*ESCOLARIDAD, data=.)%>%
   summary()
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*ESCOLARIDAD, data=.)%>%
+  summary()
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*MoCA, data=.)%>%
+  summary()
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*MoCA, data=.)%>%
+  summary()
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
@@ -351,22 +395,33 @@ filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", EST
   summary()
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ VAL*DECADA*CRI_Total, data=.)%>%
   summary()
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ VAL*DECADA*CRI_Total, data=.)%>%
   summary()
-filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*CRI_Total_Z, data=.)%>%
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*CRI_Total, data=.)%>%
+  summary()
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*CRI_Total, data=.)%>%
+  summary()filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*CRI_Total, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*CRI_Total_Z, data=.)%>%
+  aov(value ~ VAL*DECADA*CRI_Total, data=.)%>%
   summary()
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
+  summary()
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
+  summary()
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*IDARE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
@@ -382,12 +437,21 @@ filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", EST
 filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*IDERE_R_PUNTAJE, data=.)%>%
   summary()
+filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*IDERE_R_PUNTAJE, data=.)%>%
+  summary()
+filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*IDERE_R_PUNTAJE, data=.)%>%
+  summary()
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*IDERE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*IDERE_R_PUNTAJE, data=.)%>%
   summary()
+
+
+
  
 # RESTA ROSTROS - ESCENAS #
 filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
@@ -396,6 +460,9 @@ filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
 filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*ESCOLARIDAD, data=.)%>%
   summary()
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*COND*ESCOLARIDAD, data=.)%>%
+  summary()
 
 filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*MoCA, data=.)%>%
@@ -403,18 +470,27 @@ filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
 filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*MoCA, data=.)%>%
   summary()
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*COND*MoCA, data=.)%>%
+  summary()
 
 filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*COND*CRI_Total_Z, data=.)%>%
+  aov(value ~ VAL*DECADA*COND*CRI_Total, data=.)%>%
   summary()
 filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*COND*CRI_Total_Z, data=.)%>%
+  aov(value ~ VAL*DECADA*COND*CRI_Total, data=.)%>%
+  summary()
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*COND*CRI_Total, data=.)%>%
   summary()
 
 filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*IDARE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*COND*IDARE_R_PUNTAJE, data=.)%>%
+  summary()
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*IDARE_R_PUNTAJE, data=.)%>%
   summary()
 
@@ -422,6 +498,9 @@ filter(data4, MECANISM== "RAMP", MEDICION=="NUM", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*IDERE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data4, MECANISM== "RAMP", MEDICION=="DUR", !VAL=="TOT") %>%
+  aov(value ~ VAL*DECADA*COND*IDERE_R_PUNTAJE, data=.)%>%
+  summary()
+filter(data4, MECANISM== "RAMP", MEDICION=="1DU", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*COND*IDERE_R_PUNTAJE, data=.)%>%
   summary()
 
@@ -433,7 +512,7 @@ filter(data5, !VAL=="TOT") %>%
   aov(value ~ DECADA*VAL*MoCA, data=.)%>%
   summary()
 filter(data5, !VAL=="TOT") %>%
-  aov(value ~ DECADA*VAL*CRI_Total_Z, data=.)%>%
+  aov(value ~ DECADA*VAL*CRI_Total, data=.)%>%
   summary()
 filter(data5, !VAL=="TOT") %>%
   aov(value ~ DECADA*VAL*IDARE_R_PUNTAJE, data=.)%>%

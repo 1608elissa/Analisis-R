@@ -3,7 +3,6 @@ library(readxl)
 library(rstatix)
 library(tidyverse)
 
-
 ###### REGRESIONES CON VALENCIA EMOCIONAL #####
 data <- read_xlsx("Conducta resultados.xlsx",sheet = "TR_RC_EI")%>%
   gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD")) %>%

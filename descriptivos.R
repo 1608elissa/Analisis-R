@@ -20,12 +20,12 @@ data3$IDARE_E_NIVEL <-as.numeric(data3$IDARE_E_NIVEL)
 data3$IDERE_E_NIVEL <-as.numeric(data3$IDERE_E_NIVEL)
 data3$SHIPLEY <-as.numeric(data3$SHIPLEY)
 data3$MoCA <-as.numeric(data3$MoCA)
-data3$CRI_Total_Z <- as.numeric(data3$CRI_Total_Z)
+data3$CRI_Total <- as.numeric(data3$CRI_Total)
 
 
 anova_test(SHIPLEY~DECADA, data=data3)
-anova_test(CRI_Total_Z~DECADA, data=data3)
-aov(CRI_Total_Z~DECADA, data=data3)%>%
+anova_test(CRI_Total~DECADA, data=data3)
+aov(CRI_Total~DECADA, data=data3)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
@@ -36,8 +36,6 @@ aov(ESCOLARIDAD~DECADA, data=data3)%>%
   View()
 anova_test(EDAD~DECADA, data=data3)
 
-kruskal_test(CRI_Total_Z~DECADA, data=data3)
-kruskalmc(CRI_Total_Z~DECADA, data=data3)
 kruskal_test(MoCA~DECADA, data=data3)
 kruskalmc(MoCA~DECADA, data=data3)
 kruskal_test(IDARE_R_PUNTAJE~DECADA, data=data3)
@@ -65,7 +63,7 @@ for (i in decadas) {
   print()
   std.error(bases$ESCOLARIDAD)  %>%
   print()
-  std.error(bases$CRI_Total_Z)  %>%
+  std.error(bases$CRI_Total)  %>%
   print()
   range(bases$MoCA) %>%
   print()
@@ -97,7 +95,7 @@ for (i in decadas) {
     print()
   mean(bases$ESCOLARIDAD)  %>%
     print()
-  mean(bases$CRI_Total_Z)  %>%
+  mean(bases$CRI_Total)  %>%
     print()
   median(bases$MoCA) %>%
     print()
