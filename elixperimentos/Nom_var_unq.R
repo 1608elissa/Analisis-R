@@ -1,4 +1,4 @@
-mod<- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "cubetas")
+mod<- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "cubetas") %>%
 filter(mod,AD33==1)
 
 ####part2####
