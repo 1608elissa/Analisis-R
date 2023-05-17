@@ -2,7 +2,6 @@ library(readxl)
 library(rstatix)
 library(tidyverse)
 library(magrittr)
-library(tidymodels)
 
 #### BASE DE DATOS CORRELACIONES ####
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
@@ -15,7 +14,6 @@ data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
 
 data$DECADA <- as.factor(data$DECADA)
 data$SEXO <- as.factor(data$SEXO)
-data$COVID_CAT <- as.factor(data$COVID_CAT)
 data$VD <- as.factor(data$VD)
 data$COND <- as.factor(data$COND)
 data$VAL <- as.factor(data$VAL)
@@ -69,9 +67,6 @@ filter(data, VD == "RC", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "RC", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "RC", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
 
@@ -113,9 +108,6 @@ filter(data, VD == "RC", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
             method="spearman")
 filter(data, VD == "RC", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "RC", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "RC", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDERE_R_PUNTAJE,
@@ -172,9 +164,6 @@ filter(data, VD == "TR", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "TR", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "TR", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
 
@@ -216,9 +205,6 @@ filter(data, VD == "TR", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
             method="spearman")
 filter(data, VD == "TR", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "TR", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "TR", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDERE_R_PUNTAJE,
@@ -275,9 +261,6 @@ filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
 
@@ -319,9 +302,6 @@ filter(data, VD == "EI", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
             method="spearman")
 filter(data, VD == "EI", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "EI", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "EI", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, IDERE_R_PUNTAJE,
@@ -378,9 +358,6 @@ filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
 
@@ -422,9 +399,6 @@ filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
             method="spearman")
 filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, IDARE_R_PUNTAJE,
-            method="spearman")
-filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
-  cor.test( value, IDERE_R_PUNTAJE,
             method="spearman")
 filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, IDERE_R_PUNTAJE,
