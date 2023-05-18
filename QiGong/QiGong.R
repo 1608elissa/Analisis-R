@@ -5,7 +5,7 @@ library(tidyverse)
 
 ###### BASES DE DATOS #####
 data <- read_xlsx("QiGong/QiGong.xlsx",sheet = "Nback")%>%
-  gather(cond_ses_tipo_VD, value, -c("Sj")) %>%
+  gather(cond_ses_tipo_VD, value, -c("Sj","SEXO","EDAD")) %>%
   separate(cond_ses_tipo_VD, c("COND","SESION","TIPO","VD"), sep = "_")
 
 data2 <- read_xlsx("QiGong/QiGong.xlsx",sheet = "Eriksen")%>%
