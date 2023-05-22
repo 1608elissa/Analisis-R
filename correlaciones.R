@@ -3,6 +3,7 @@ library(rstatix)
 library(tidyverse)
 library(magrittr)
 
+
 #### BASE DE DATOS CORRELACIONES ####
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
   gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
@@ -215,6 +216,37 @@ filter(data, VD == "TR", COND== "ESC", VAL=="TOT", TIPO=="TG") %$%
 
 # INDICE DE EFICIENCIA INVERSA ####
 
+a <- filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG")
+
+b <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = a)
+
+step(object = b, direction = "both", trace = 1)
+
+modelo <- (lm(formula = value ~ EDAD + MoCA + CRI_Total + EDAD:CRI_Total + 
+                MoCA:CRI_Total, data = a))
+summary(modelo)
+
+confint(lm(formula = value ~ EDAD + MoCA + CRI_Total + EDAD:CRI_Total + 
+             MoCA:CRI_Total, data = a))
+
+filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %>%
+  lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data =.)%>%
+  summary()
+
+
+plot1 <- ggplot(data = a, aes(EDAD, modelo$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot2 <- ggplot(data = a, aes(MoCA, modelo$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot3 <- ggplot(data = a, aes(CRI_Total, modelo$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+
+grid.arrange(plot1, plot2, plot3)
+
+
 filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, AMP_DUR_ROS,
             method="pearson")
@@ -248,6 +280,21 @@ filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
 filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, EDAD,
             method="pearson")
+filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %>%
+  lm(formula= value ~ EDAD, data =.)%>%
+  summary()
+
+filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %>%
+  lm(formula= value ~ EDAD*ESCOLARIDAD, data =.)%>%
+  summary()
+
+filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %>%
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() + 
+  labs(x = "EDAD", y = "EI") +  
+  geom_smooth(method = "lm", se = FALSE, color= "violet") +
+  theme_classic()
+
 filter(data, VD == "EI", COND== "ROS", VAL=="TOT", TIPO=="TG") %$%
   cor.test( value, MoCA,
             method="spearman")
