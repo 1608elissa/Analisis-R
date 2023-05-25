@@ -2,7 +2,7 @@ library(readxl)
 library(rstatix)
 library(tidyverse)
 library(magrittr)
-
+library(gridExtra)
 
 #### BASE DE DATOS CORRELACIONES ####
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
@@ -42,6 +42,27 @@ step(object = d, direction = "both", trace = 1)
 modeloEIESC <- (lm(formula = value ~ EDAD * ESCOLARIDAD * MoCA * CRI_Total, data = c))
 summary(modeloEIESC)
 
+plot1 <- ggplot(data = a, aes(CRI_Total, modeloEIROS$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot2 <- ggplot(data = a, aes(MoCA, modeloEIROS$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+
+grid.arrange(plot1, plot2)
+
+plot1 <- ggplot(data = c, aes(EDAD, modeloEIESC$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot2 <- ggplot(data = c, aes(MoCA, modeloEIESC$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot3 <- ggplot(data = c, aes(ESCOLARIDAD, modeloEIESC$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+
+grid.arrange(plot1, plot2, plot3)
+
 
 #### INDICES DE AMPLIFICACION ####
 e <- filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")
@@ -53,6 +74,9 @@ step(object = f, direction = "both", trace = 1)
 modeloAMPDUR <- (lm(formula = value ~ ESCOLARIDAD + MoCA + ESCOLARIDAD:MoCA, data = e))
 summary(modeloAMPDUR)
 
+ggplot(data = e, aes(ESCOLARIDAD, modeloAMPDUR$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
 
 #### INDICES DE SUPRESION ####
 g <- filter(data, COND== "SUP", VD == "DUR", VAL=="TOT", TIPO=="ROS")
@@ -95,7 +119,23 @@ modeloDPROS <- (lm(formula = value ~ EDAD + MoCA + CRI_Total + EDAD:MoCA + MoCA:
                    data = i))
 summary(modeloDPROS)
 
+ggplot(data = j, aes(CRI_Total, modeloDPROS$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
 
+
+filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
+  ggplot(aes(x = CRI_Total, y = value)) +
+  geom_point() + 
+  labs(x = "CRI_Total", y = "DPR") +  
+  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+  theme_classic()
+
+ggplot(data = j, aes(x = CRI_Total, modeloDPROS$residuals)) +
+  geom_point() + 
+  geom_smooth(method = "lm", color= "firebrick") +
+  geom_abline(yintercept = 0) +
+  theme_classic()
 
 k <- filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")
 
@@ -105,3 +145,12 @@ step(object = l, direction = "both", trace = 1)
 
 modeloDPESC <- (lm(formula = value ~ EDAD * ESCOLARIDAD * MoCA * CRI_Total, data = k))
 summary(modeloDPESC)
+
+plot1 <- ggplot(data = c, aes(EDAD, modeloDPESC$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+plot2 <- ggplot(data = c, aes(ESCOLARIDAD, modeloDPESC$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+
+grid.arrange(plot1, plot2)
