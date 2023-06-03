@@ -131,7 +131,7 @@ ggplot(data3, aes(x = DECADA, y = MoCA, color=DECADA)) +
                width = 0.35,
                color = "purple")
 
-ggplot(data3, aes(x = DECADA, y = CRI_Total_Z, color=DECADA)) +
+ggplot(data3, aes(x = DECADA, y = CRI_Total, color=DECADA)) +
   geom_violin(alpha = 0.5) +
   geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
   theme(legend.position = "none") +

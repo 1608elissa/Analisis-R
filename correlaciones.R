@@ -453,3 +453,8 @@ filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
 filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
+
+
+
+cor.test(data$EDAD, data$CRI_Total, method="pearson")
+cor.test(data$EDAD, data$ESCOLARIDAD, method="pearson")
