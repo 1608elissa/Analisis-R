@@ -168,11 +168,11 @@ filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", EST
   filter(p.adj < 0.05)%>%
   View()
 
-filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA, data=.)%>%
   summary()
 
-filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
+filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value~ VAL*DECADA, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
@@ -382,10 +382,10 @@ filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", EST
   aov(value ~ VAL*DECADA*MoCA, data=.)%>%
   summary()
 filter(data2, MECANISM== "AMP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*MoCA, data=.)%>%
+  aov(value ~ VAL*DECADA*MoCA*ESCOLARIDAD*CRI_Total*IDARE_R_PUNTAJE*IDERE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
-  aov(value ~ VAL*DECADA*MoCA, data=.)%>%
+  aov(value ~ VAL*DECADA*MoCA*ESCOLARIDAD*CRI_Total*IDARE_R_PUNTAJE*IDERE_R_PUNTAJE, data=.)%>%
   summary()
 filter(data2, MECANISM== "SUP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT") %>%
   aov(value ~ VAL*DECADA*MoCA, data=.)%>%

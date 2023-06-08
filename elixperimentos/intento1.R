@@ -4,7 +4,7 @@ library(readxl)
 library(openxlsx)
 
 
-dat <- read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "conjunto_datos")
+dat <- read_excel("mineria de datos/conjunto_datos25abril2023 sin tabla.xlsx",sheet = "conjunto_datos")
 list<- pull(read_excel("mineria de datos/conjunto_datos25abril2023.xlsx",sheet = "Sheet1"),2)
 i <- list[1:33]
 
@@ -66,3 +66,31 @@ writeDataTable(wb,"AC28IMC" , as.tibble(dat$AC28IMC))
 openXL(wb) #abrir sin guardar
 saveWorkbook(wb, "labes.xlsx", overwrite = TRUE) #guardar sin abrir
 
+
+
+
+
+for (i in 1:length(dat$AC27IMC)) {
+  
+  if (dat$AC27IMC[i]==666) {
+    dat$AC27IMC[i] <- 666
+    
+  } else if (dat$AC27IMC[i] < 18.5) {
+    
+    dat$AC27IMC[i] <- 1
+    
+  }else if (dat$AC27IMC[i] < 24.9) {
+    dat$AC27IMC[i] <- 2
+  }else if (dat$AC27IMC[i] < 29.9) {
+    dat$AC27IMC[i] <- 3
+  }else {
+    dat$AC27IMC[i] <- 4
+  }
+  
+  
+}
+
+addWorksheet(wb,"AC27IMC")
+writeDataTable(wb,"AC27IMC" , as.tibble(dat$AC27IMC))
+
+openXL(wb) #abrir sin guardar
