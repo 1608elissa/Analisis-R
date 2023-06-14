@@ -154,3 +154,61 @@ plot2 <- ggplot(data = c, aes(ESCOLARIDAD, modeloDPESC$residuals)) +
   theme_bw()
 
 grid.arrange(plot1, plot2)
+
+
+
+m <- filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")
+
+n <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = m)
+
+step(object = n, direction = "both", trace = 1)
+
+modeloEIDPROS <- (lm(formula = value ~ EDAD + ESCOLARIDAD + MoCA + CRI_Total + 
+                       EDAD:ESCOLARIDAD + EDAD:MoCA + EDAD:CRI_Total + ESCOLARIDAD:CRI_Total + 
+                       MoCA:CRI_Total + EDAD:ESCOLARIDAD:CRI_Total + EDAD:MoCA:CRI_Total, 
+                     data = m))
+summary(modeloEIDPROS)
+
+ggplot(data = n, aes(CRI_Total, modeloDPROS$residuals)) +
+  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
+  theme_bw()
+
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() + 
+  labs(x = "EDAD", y = "DPR") +  
+  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+  theme_classic()
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
+  ggplot(aes(x = ESCOLARIDAD, y = value)) +
+  geom_point() + 
+  labs(x = "ESCOLARIDAD", y = "DPR") +  
+  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+  theme_classic()
+
+
+o <- filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")
+
+p <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = o)
+
+step(object = p, direction = "both", trace = 1)
+
+modeloEIDPESC <- (lm(formula = value ~ EDAD * ESCOLARIDAD * MoCA * CRI_Total, data = o))
+summary(modeloEIDPESC)
+
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %>%
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() + 
+  labs(x = "EDAD", y = "DPR") +  
+  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+  theme_classic()
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %>%
+  ggplot(aes(x = ESCOLARIDAD, y = value)) +
+  geom_point() + 
+  labs(x = "ESCOLARIDAD", y = "DPR") +  
+  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+  theme_classic()
