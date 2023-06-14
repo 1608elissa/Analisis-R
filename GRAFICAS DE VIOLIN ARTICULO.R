@@ -285,18 +285,6 @@ filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
                color = "#473C8B")
 
 filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
-  ggplot(aes(y = value, x = VAL, color=VAL)) +
-  geom_violin(trim = FALSE, draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
-  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
-  theme(legend.position = "none") +
-  theme_classic() +
-  geom_boxplot(width = 0.2) +
-  stat_summary(fun = "mean",
-               geom = "crossbar", 
-               width = 0.35,
-               color = "#473C8B")
-
-filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
   ggplot(aes(y = value, x = COND, color=COND)) +
   geom_violin(trim = FALSE, draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
   geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
@@ -307,30 +295,6 @@ filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
                geom = "crossbar", 
                width = 0.35,
                color = "#473C8B")
-
-filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
-  summarySE(measurevar = "value", groupvars = c("COND","VAL"))%>%
-  ggplot(aes(y=value, x=VAL, fill= COND)) +
-  geom_col(position = "dodge") + 
-  theme_classic() +
-  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
-                position = "dodge")
-
-filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
-  summarySE(measurevar = "value", groupvars = c("COND","DECADA"))%>%
-  ggplot(aes(y=value, x=DECADA, fill= COND)) +
-  geom_col(position = "dodge") + 
-  theme_classic() +
-  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
-                position = "dodge")
-
-filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
-  summarySE(measurevar = "value", groupvars = c("VAL","DECADA"))%>%
-  ggplot(aes(y=value, x=DECADA, fill= VAL)) +
-  geom_col(position = "dodge") + 
-  theme_classic() +
-  geom_errorbar(aes(ymin = value - sd, ymax = value + sd),
-                position = "dodge")
 
 
 #### GRAFICAS DE VIOLIN MOVIMIENTOS OCULARES ####

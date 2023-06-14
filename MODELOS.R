@@ -169,27 +169,23 @@ modeloEIDPROS <- (lm(formula = value ~ EDAD + ESCOLARIDAD + MoCA + CRI_Total +
                      data = m))
 summary(modeloEIDPROS)
 
-ggplot(data = n, aes(CRI_Total, modeloDPROS$residuals)) +
-  geom_point() + geom_smooth(color = "firebrick") + geom_hline(yintercept = 0) +
-  theme_bw()
-
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() + 
-  labs(x = "EDAD", y = "DPR") +  
+  labs(x = "EDAD", y = "EIDP") +  
   geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
   theme_classic()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
   ggplot(aes(x = ESCOLARIDAD, y = value)) +
   geom_point() + 
-  labs(x = "ESCOLARIDAD", y = "DPR") +  
+  labs(x = "ESCOLARIDAD", y = "EIDP") +  
   geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
   theme_classic()
 
 
-o <- filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")
+o <- filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")
 
 p <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = o)
 
@@ -202,13 +198,13 @@ summary(modeloEIDPESC)
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() + 
-  labs(x = "EDAD", y = "DPR") +  
+  labs(x = "EDAD", y = "EIDP") +  
   geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
   theme_classic()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %>%
   ggplot(aes(x = ESCOLARIDAD, y = value)) +
   geom_point() + 
-  labs(x = "ESCOLARIDAD", y = "DPR") +  
+  labs(x = "ESCOLARIDAD", y = "EIDP") +  
   geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
   theme_classic()
