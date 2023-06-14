@@ -81,7 +81,7 @@ data1$DECADA <- as.factor(data1$DECADA)
 data1$SEXO <- as.factor(data1$SEXO)
 data1$ENF_NEURO_FAM <- as.factor(data1$ENF_NEURO_FAM)
 data1$ENF_PSIC <- as.factor(data1$ENF_PSIC)
-data1$COVID_CAT <- as.factor(data1$COVID_CAT)
+data1$COVID <- as.factor(data1$COVID)
 data1$IDARE_R_NIVEL <- as.factor(data1$IDARE_R_NIVEL)
 data1$IDARE_E_NIVEL <- as.factor(data1$IDARE_E_NIVEL)
 data1$IDERE_R_NIVEL <- as.factor(data1$IDERE_R_NIVEL)
@@ -90,22 +90,11 @@ data1$COND <- as.factor(data1$COND)
 data1$VAL <- as.factor(data1$VAL)
 
 
-filter(data1, DPRIMA =="DPR", !VAL=="TOT") %>%
+filter(data1, !VAL=="TOT") %>%
   aov(value ~ COND*DECADA*VAL, data=.)%>%
   summary()
 
-filter(data1, DPRIMA =="DPR", !VAL=="TOT") %>%
-  aov(value~COND*DECADA*VAL, data=.)%>%
-  tukey_hsd()%>%
-  filter(p.adj < 0.05)%>%
-  View()
-
-
-filter(data1, DPRIMA =="EIDP", !VAL=="TOT") %>%
-  aov(value ~ COND*DECADA*VAL, data=.)%>%
-  summary()
-
-filter(data1, DPRIMA =="EIDP", !VAL=="TOT") %>%
+filter(data1, !VAL=="TOT") %>%
   aov(value~COND*DECADA*VAL, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
