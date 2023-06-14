@@ -454,7 +454,68 @@ filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
 
+# EI NUEVO CON D PRIMA ####
 
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, AMP_DUR_ROS,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, SUP_DUR_ROS,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, ESCOLARIDAD,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, ESCOLARIDAD,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, EDAD,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, MoCA,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, CRI_Total,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, IDARE_R_PUNTAJE,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, IDERE_R_PUNTAJE,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
+  cor.test( value, COVID_CAT,
+            method="spearman")
 
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, AMP_DUR_ROS,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, SUP_DUR_ROS,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, ESCOLARIDAD,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, EDAD,
+            method="pearson")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, MoCA,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, CRI_Total,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, IDARE_R_PUNTAJE,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, IDERE_R_PUNTAJE,
+            method="spearman")
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
+  cor.test( value, COVID_CAT,
+            method="spearman")
+
+##### EDAD Y CRIQ ####
 cor.test(data$EDAD, data$CRI_Total, method="pearson")
 cor.test(data$EDAD, data$ESCOLARIDAD, method="pearson")
+

@@ -90,11 +90,21 @@ data1$COND <- as.factor(data1$COND)
 data1$VAL <- as.factor(data1$VAL)
 
 
-filter(data1, !VAL=="TOT") %>%
+filter(data1, DPRIMA== "DPR", !VAL=="TOT") %>%
   aov(value ~ COND*DECADA*VAL, data=.)%>%
   summary()
 
-filter(data1, !VAL=="TOT") %>%
+filter(data1, DPRIMA== "DPR", !VAL=="TOT") %>%
+  aov(value~COND*DECADA*VAL, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
+  aov(value ~ COND*DECADA*VAL, data=.)%>%
+  summary()
+
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
   aov(value~COND*DECADA*VAL, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
