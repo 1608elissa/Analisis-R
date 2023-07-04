@@ -285,6 +285,18 @@ filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
                color = "#473C8B")
 
 filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
+  ggplot(aes(y = value, x = ESCOL_CAT, color=ESCOL_CAT)) +
+  geom_violin(trim = FALSE, draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
+  geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +
+  theme(legend.position = "none") +
+  theme_classic() +
+  geom_boxplot(width = 0.2) +
+  stat_summary(fun = "mean",
+               geom = "crossbar", 
+               width = 0.35,
+               color = "#473C8B")
+
+filter(data1, DPRIMA== "EIDP",!VAL=="TOT") %>%
   ggplot(aes(y = value, x = COND, color=COND)) +
   geom_violin(trim = FALSE, draw_quantiles = c(0.25, 0.5, 0.75), alpha = 0.5) +
   geom_jitter(position = position_jitter(seed = 1, width = 0.2)) +

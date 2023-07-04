@@ -6,7 +6,7 @@ library(magrittr)
 
 #### BASE DE DATOS CORRELACIONES ####
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
-  gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
+  gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", "ESCOL_CAT", 
                                  "CRI_Total", "IDARE_R_PUNTAJE", "IDERE_R_PUNTAJE",
                                  "COVID_CAT", "SUEÑO_NOR", "AMP_DUR_ROS", "AMP_DUR_ESC",
                                  "SUP_DUR_ROS", "SUP_DUR_ESC", "AMP_1DU_ROS",
@@ -458,16 +458,16 @@ filter(data, VD == "DPR", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, AMP_DUR_ROS,
-            method="pearson")
+            method="spearman")
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, SUP_DUR_ROS,
-            method="pearson")
+            method="spearman")
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, ESCOLARIDAD,
             method="pearson")
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, ESCOLARIDAD,
-            method="pearson")
+            method="spearman")
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, EDAD,
             method="pearson")
@@ -487,12 +487,13 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %$%
   cor.test( value, COVID_CAT,
             method="spearman")
 
+
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, AMP_DUR_ROS,
-            method="pearson")
+            method="spearman")
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, SUP_DUR_ROS,
-            method="pearson")
+            method="spearman")
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %$%
   cor.test( value, ESCOLARIDAD,
             method="pearson")

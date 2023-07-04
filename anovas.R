@@ -5,12 +5,13 @@ library(tidyverse)
 
 ###### ANOVAS CON VALENCIA EMOCIONAL #####
 data <- read_xlsx("Junto.xlsx",sheet = "TR_RC_EI")%>%
-  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
-                                 "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
-                                 "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
-                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                 "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                 "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                 "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                 "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
   separate(tip_cond_val, c("COND","TR_RC","TIPO", "VAL"), sep = "_")
 
 data$DECADA <- as.factor(data$DECADA)
@@ -68,17 +69,19 @@ filter(data, TR_RC == "EI", !COND=="PAS", !VAL=="TOT", TIPO=="TG") %>%
 #### D PRIMA ####
 
 data1 <- read_xlsx("Junto.xlsx",sheet = "D_PRIMA")%>%
-  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
-                                 "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
-                                 "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
-                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                 "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                 "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                 "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                 "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
   separate(tip_cond_val, c("DPRIMA","COND","VAL"),
            sep = "_")
 
 data1$DECADA <- as.factor(data1$DECADA)
 data1$SEXO <- as.factor(data1$SEXO)
+data1$ESCOL_CAT <- as.factor(data1$ESCOL_CAT)
 data1$ENF_NEURO_FAM <- as.factor(data1$ENF_NEURO_FAM)
 data1$ENF_PSIC <- as.factor(data1$ENF_PSIC)
 data1$COVID_CAT <- as.factor(data1$COVID_CAT)
@@ -101,24 +104,27 @@ filter(data1, DPRIMA== "DPR", !VAL=="TOT") %>%
   View()
 
 filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
-  aov(value ~ COND*DECADA*VAL, data=.)%>%
+  aov(value ~ DECADA*COND*VAL*ESCOL_CAT, data=.)%>%
   summary()
 
 filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
-  aov(value~COND*DECADA*VAL, data=.)%>%
+  aov(value~ DECADA*COND*VAL*ESCOL_CAT, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
 
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
+  shapiro.test(value)
 #### COSTO EN LA MEMORIA DE TRABAJO ESCENAS - ROSTROS ####
 
 data5 <- read_xlsx("Junto.xlsx",sheet = "Costo_TR")%>%
-  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
-                                 "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
-                                 "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
-                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                 "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                 "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                 "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                 "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
   separate(tip_cond_val, c("COSTO","TR","TIPO", "VAL"),
            sep = "_")
 
@@ -150,12 +156,13 @@ filter(data5, !VAL=="TOT") %>%
 #### MOVIMIENTOS OCULARES ####
 
 data2 <- read_xlsx("Junto.xlsx",sheet = "INDICES")%>%
-  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
-                                 "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
-                                 "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
-                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                 "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                 "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                 "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                 "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
   separate(tip_cond_val, c("MECANISM","MEDICION","CALIF","FASE","ESTIMULO","TIPO","VAL"),
            sep = "_")
 data2$DECADA <- as.factor(data2$DECADA)
@@ -166,6 +173,10 @@ data2$FASE <- as.factor(data2$FASE)
 data2$ESTIMULO <- as.factor(data2$ESTIMULO)
 data2$TIPO <- as.factor(data2$TIPO)
 data2$VAL <- as.factor(data2$VAL)
+
+
+a <- filter(data2, MECANISM== "AMP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT")
+b <- filter(data2, MECANISM== "SUP", MEDICION=="DUR", CALIF=="COR", FASE== "COD", ESTIMULO== "ROS", TIPO=="TG", !VAL=="TOT")
 
 
 filter(data2, MECANISM== "AMP", MEDICION=="NUM", CALIF=="COR", FASE== "COD", ESTIMULO== "ESC", TIPO=="TG", !VAL=="TOT") %>%
@@ -232,12 +243,13 @@ filter(data2, MECANISM== "SUP", MEDICION=="1DU", CALIF=="COR", FASE== "COD", EST
 # RESTAR DE ROSTROS Y ESCENAS #
 
 data4 <- read_xlsx("Junto.xlsx",sheet = "COSTO_MECANISMOS")%>%
-  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                 "CRI_Total", "ENF_NEURO_FAM", "ENF_PSIC",
-                                 "EDIMBURGO", "IDARE_R_PUNTAJE", "IDARE_R_NIVEL",  
-                                 "IDARE_E_PUNTAJE", "IDARE_E_NIVEL", "IDERE_R_PUNTAJE",
-                                 "IDERE_R_NIVEL", "IDERE_E_PUNTAJE", "IDERE_E_NIVEL",
-                                 "COVID_CAT", "SHIPLEY", "SUEÑO_NOR")) %>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                 "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                 "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                 "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                 "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
   separate(tip_cond_val, c("MECANISM","MEDICION","COND","VAL"),
            sep = "_")
 data4$DECADA <- as.factor(data4$DECADA)

@@ -6,11 +6,13 @@ library(gridExtra)
 
 #### BASE DE DATOS CORRELACIONES ####
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
-  gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD", "MoCA", "ESCOLARIDAD", 
-                                     "CRI_Total", "IDARE_R_PUNTAJE", "IDERE_R_PUNTAJE",
-                                     "COVID_CAT", "SUEÑO_NOR", "AMP_DUR_ROS", "AMP_DUR_ESC",
-                                     "SUP_DUR_ROS", "SUP_DUR_ESC", "AMP_1DU_ROS",
-                                     "AMP_1DU_ESC", "SUP_1DU_ROS", "SUP_1DU_ESC")) %>%
+  gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                     "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                     "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                     "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                     "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                     "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                     "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
   separate(cond_tip_est_val, c("COND","VD","TIPO", "VAL"), sep = "_")
 
 data$DECADA <- as.factor(data$DECADA)
@@ -159,14 +161,11 @@ grid.arrange(plot1, plot2)
 
 m <- filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")
 
-n <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = m)
+n <- lm(formula= value ~ EDAD+ESCOLARIDAD+MoCA+CRI_Total, data = m)
 
 step(object = n, direction = "both", trace = 1)
 
-modeloEIDPROS <- (lm(formula = value ~ EDAD + ESCOLARIDAD + MoCA + CRI_Total + 
-                       EDAD:ESCOLARIDAD + EDAD:MoCA + EDAD:CRI_Total + ESCOLARIDAD:CRI_Total + 
-                       MoCA:CRI_Total + EDAD:ESCOLARIDAD:CRI_Total + EDAD:MoCA:CRI_Total, 
-                     data = m))
+modeloEIDPROS <- (lm(formula = value ~ EDAD + MoCA + CRI_Total, data = m))
 summary(modeloEIDPROS)
 
 
@@ -178,9 +177,16 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
   theme_classic()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
-  ggplot(aes(x = ESCOLARIDAD, y = value)) +
+  ggplot(aes(x = MoCA, y = value)) +
   geom_point() + 
-  labs(x = "ESCOLARIDAD", y = "EIDP") +  
+  labs(x = "MoCA", y = "EIDP") +  
+  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+  theme_classic()
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS") %>%
+  ggplot(aes(x = CRI_Total, y = value)) +
+  geom_point() + 
+  labs(x = "CRI_Total", y = "EIDP") +  
   geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
   theme_classic()
 
