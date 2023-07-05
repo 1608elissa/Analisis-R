@@ -22,117 +22,143 @@ data$COND <- as.factor(data$COND)
 data$VAL <- as.factor(data$VAL)
 data$TIPO <- as.factor(data$TIPO)
 
-#### FILTROS BASES DE DATOS ####
-filEIDPESC <- filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")
-filEIDPROS <- filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")
-
 #### AMPLIFICACION ANALISIS CON ATENDER ESCENAS ####
 ### EDAD ###
-modelampescEDAD <- lm(formula= value ~ AMP_ROS * EDAD_CAT, data = filEIDPESC)
-summary(modelampescEDAD)
+filter(data, !EDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ AMP_ROS * EDAD_CAT, data =.)%>%
+  summary()
 
 ### ESCOLARIDAD_CAT ###
-modelampescESCOL <- lm(formula= value ~ AMP_ROS * ESCOLARIDAD_CAT, data = filEIDPESC)
-summary(modelampescESCOL)
+filter(data, !ESCOLARIDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ AMP_ROS * ESCOLARIDAD_CAT, data =.)%>%
+  summary()
 
 ### MoCA_CAT ###
-modelampescMOCA <- lm(formula= value ~ AMP_ROS * MoCA_CAT, data = filEIDPESC)
-summary(modelampescMOCA)
+filter(data, !MoCA_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ AMP_ROS * MoCA_CAT, data =.)%>%
+  summary()
 
 ### CRI_Total_CAT ###
-modelampescCRI <- lm(formula= value ~ AMP_ROS * CRI_Total_CAT, data = filEIDPESC)
-summary(modelampescCRI)
+filter(data, !CRI_Total_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ AMP_ROS * CRI_Total_CAT, data =.)%>%
+  summary()
 
 ### IDARE_R_CAT ###
-modelampescIDARE_R <- lm(formula= value ~ AMP_ROS * IDARE_R_CAT, data = filEIDPESC)
-summary(modelampescIDARE_R)
+filter(data, !IDARE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ AMP_ROS * IDARE_R_CAT, data =.)%>%
+  summary()
 
 ### IDERE_R_CAT ###
-modelampescIDERE_R <- lm(formula= value ~ AMP_ROS * IDERE_R_CAT, data = filEIDPESC)
-summary(modelampescIDERE_R)
+filter(data, !IDERE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ AMP_ROS * IDERE_R_CAT, data =.)%>%
+  summary()
 
 #### AMPLIFICACION ANALISIS CON ATENDER ROSTROS ####
 ### EDAD ###
-modelamprosEDAD <- lm(formula= value ~ AMP_ROS * EDAD_CAT, data = filEIDPROS)
-summary(modelamprosEDAD)
+filter(data, !EDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS * EDAD_CAT, data =.)%>%
+  summary()
 
 ### ESCOLARIDAD_CAT ###
-modelamprosESCOL <- lm(formula= value ~ AMP_ROS * ESCOLARIDAD_CAT, data = filEIDPROS)
-summary(modelamprosESCOL)
+filter(data, !ESCOLARIDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS * ESCOLARIDAD_CAT, data =.)%>%
+  summary()
 
 ### MoCA_CAT ###
-modelamprosMOCA <- lm(formula= value ~ AMP_ROS * MoCA_CAT, data = filEIDPROS)
-summary(modelamprosMOCA)
+filter(data, !MoCA_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS * MoCA_CAT, data =.)%>%
+  summary()
 
 ### CRI_Total_CAT ###
-modelamprosCRI <- lm(formula= value ~ AMP_ROS * CRI_Total_CAT, data = filEIDPROS)
-summary(modelamprosCRI)
+filter(data, !CRI_Total_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS * CRI_Total_CAT, data =.)%>%
+  summary()
 
 ### IDARE_R_CAT ###
-modelamprosIDARE_R <- lm(formula= value ~ AMP_ROS * IDARE_R_CAT, data = filEIDPROS)
-summary(modelamprosIDARE_R)
+filter(data, !IDARE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS * IDARE_R_CAT, data =.)%>%
+  summary()
 
 ### IDERE_R_CAT ###
-modelamprosIDERE_R <- lm(formula= value ~ AMP_ROS * IDERE_R_CAT, data = filEIDPROS)
-summary(modelamprosIDERE_R)
-
+filter(data, !IDERE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS * IDERE_R_CAT, data =.)%>%
+  summary()
 
 #### SUPRESION ANALISIS CON ATENDER ESCENAS ####
 ### EDAD ###
-modelsupescEDAD <- lm(formula= value ~ SUP_ROS * EDAD_CAT, data = filEIDPESC)
-summary(modelsupescEDAD)
+filter(data, !EDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS * EDAD_CAT, data =.)%>%
+  summary()
 
 ### ESCOLARIDAD_CAT ###
-modelsupescESCOL <- lm(formula= value ~ SUP_ROS * ESCOLARIDAD_CAT, data = filEIDPESC)
-summary(modelsupescESCOL)
+filter(data, !ESCOLARIDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS * ESCOLARIDAD_CAT, data =.)%>%
+  summary()
 
 ### MoCA_CAT ###
-modelsupescMOCA <- lm(formula= value ~ SUP_ROS * MoCA_CAT, data = filEIDPESC)
-summary(modelsupescMOCA)
+filter(data, !MoCA_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS * MoCA_CAT, data =.)%>%
+  summary()
 
 ### CRI_Total_CAT ###
-modelsupescCRI <- lm(formula= value ~ SUP_ROS * CRI_Total_CAT, data = filEIDPESC)
-summary(modelsupescCRI)
+filter(data, !CRI_Total_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS * CRI_Total_CAT, data =.)%>%
+  summary()
 
 ### IDARE_R_CAT ###
-modelsupescIDARE_R <- lm(formula= value ~ SUP_ROS * IDARE_R_CAT, data = filEIDPESC)
-summary(modelsupescIDARE_R)
+filter(data, !IDARE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS * IDARE_R_CAT, data =.)%>%
+  summary()
 
 ### IDERE_R_CAT ###
-modelsupescIDERE_R <- lm(formula= value ~ SUP_ROS * IDERE_R_CAT, data = filEIDPESC)
-summary(modelsupescIDERE_R)
+filter(data, !IDERE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS * IDERE_R_CAT, data =.)%>%
+  summary()
 
 #### SUPRESION ANALISIS CON ATENDER ROSTROS ####
 ### EDAD ###
-modelsuprosEDAD <- lm(formula= value ~ SUP_ROS * EDAD_CAT, data = filEIDPROS)
-summary(modelsuprosEDAD)
+filter(data, !EDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS * EDAD_CAT, data =.)%>%
+  summary()
 
 ### ESCOLARIDAD_CAT ###
-modelsuprosESCOL <- lm(formula= value ~ SUP_ROS * ESCOLARIDAD_CAT, data = filEIDPROS)
-summary(modelsuprosESCOL)
+filter(data, !ESCOLARIDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS * ESCOLARIDAD_CAT, data =.)%>%
+  summary()
 
 ### MoCA_CAT ###
-modelsuprosMOCA <- lm(formula= value ~ SUP_ROS * MoCA_CAT, data = filEIDPROS)
-summary(modelsuprosMOCA)
+filter(data, !MoCA_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS * MoCA_CAT, data =.)%>%
+  summary()
 
 ### CRI_Total_CAT ###
-modelsuprosCRI <- lm(formula= value ~ SUP_ROS * CRI_Total_CAT, data = filEIDPROS)
-summary(modelsuprosCRI)
+filter(data, !CRI_Total_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS * CRI_Total_CAT, data =.)%>%
+  summary()
 
 ### IDARE_R_CAT ###
-modelsuprosIDARE_R <- lm(formula= value ~ SUP_ROS * IDARE_R_CAT, data = filEIDPROS)
-summary(modelsuprosIDARE_R)
+filter(data, !IDARE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS * IDARE_R_CAT, data =.)%>%
+  summary()
 
 ### IDERE_R_CAT ###
-modelsuprosIDERE_R <- lm(formula= value ~ SUP_ROS * IDERE_R_CAT, data = filEIDPROS)
-summary(modelsuprosIDERE_R)
+filter(data, !IDERE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS * IDERE_R_CAT, data =.)%>%
+  summary()
 
 
+#### GRAFICAS PARA AMPLIFICACION ROSTROS ####
+data %>%
+  mutate(IDERE_R_CAT = as.factor(IDERE_R_CAT),
+         IDARE_R_CAT = as.factor(IDARE_R_CAT),
+         CRI_Total_CAT = as.factor(CRI_Total_CAT),
+         EDAD_CAT = as.factor(EDAD_CAT),
+         ESCOLARIDAD_CAT = as.factor(ESCOLARIDAD_CAT),
+         MoCA_CAT = as.factor(MoCA_CAT))
 
-
-filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS") %>%
-  ggplot(aes(x = ESCOLARIDAD, y = value)) +
-  geom_point() + 
-  labs(x = "ESCOLARIDAD", y = "EIDP") +  
-  geom_smooth(method = "lm", se = FALSE, color= "firebrick") +
+filter(data, !IDERE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  ggplot(aes(x = SUP_ROS, y = value, colour = IDERE_R_CAT)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "SUPRESION", y = "EI") +  
   theme_classic()
