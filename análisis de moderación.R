@@ -3,6 +3,7 @@ library(rstatix)
 library(tidyverse)
 library(moderndive)
 
+
 #### BASE DE DATOS CORRELACIONES ####
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
   gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
@@ -142,10 +143,15 @@ filter(data, !IDARE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=
   summary()
 
 ### IDERE_R_CAT ###
-filter(data, !IDERE_R_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
-  lm(formula= value ~ SUP_ROS * IDERE_R_CAT, data =.)%>%
-  summary()
+filter(data, IDERE_R_CAT=="ALTO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+ lm(formula= value ~ SUP_ROS , data =.) -> alto
 
+
+filter(data, IDERE_R_CAT=="BAJO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  lm(formula= value ~ SUP_ROS , data =.) -> bajo
+
+stargazer::stargazer(alto, bajo, type="text", df=FALSE, column.labels=c("Alto","Bajo"))
+rm(alto,bajo)
 
 #### GRAFICAS PARA AMPLIFICACION ROSTROS ####
 data %>%
