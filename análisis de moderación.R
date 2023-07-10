@@ -77,7 +77,7 @@ filter(data, MoCA_CAT=="ALTO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROS
 filter(data, MoCA_CAT=="BAJO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   lm(formula= value ~ AMP_ROS , data =.) -> AMPbajoMOCA
 
-stargazer::stargazer(AMPaltoMOCA, AMPbajoMOCA, type="text", df=FALSE, column.labels=c("Alto","Medio","Bajo"), report = "vct*p")
+stargazer::stargazer(AMPaltoMOCA, AMPbajoMOCA, type="text", df=FALSE, column.labels=c("Alto","Bajo"), report = "vct*p")
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   lm(formula= value ~ AMP_ROS * MoCA_CAT, data =.)%>%
@@ -242,6 +242,11 @@ b<-filter(data, CRI_Total_CAT=="BAJO", VD == "EIDP", COND== "DP", VAL=="TOT", TI
 
 wilcox.test(a$value,b$value)
 
+base<-filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")
+kruskal_test(value~CRI_Total_CAT, data=base)
+kruskalmc(value~CRI_Total_CAT, data=base)
+
+
 c<-filter(data, CRI_Total_CAT=="ALTO", VD == "DUR", COND== "SUP", VAL=="TOT", TIPO=="ESC")
 d<-filter(data, CRI_Total_CAT=="BAJO", VD == "DUR", COND== "SUP", VAL=="TOT", TIPO=="ESC")
 
@@ -347,6 +352,13 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "AMPLIFICACION", y = "EI") +  
   theme_classic()
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  ggplot(aes(x = AMP_ROS, y = value, colour = EDAD_CAT)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color= "violet") +
+  labs(x = "AMPLIFICACION", y = "EI") +  
+  theme_classic()
   
 ### ESCOLARIDAD_CAT ###
 filter(data, !ESCOLARIDAD_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
@@ -361,6 +373,13 @@ filter(data, !MoCA_CAT=="MEDIO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="R
   ggplot(aes(x = AMP_ROS, y = value, colour = MoCA_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "AMPLIFICACION", y = "EI") +  
+  theme_classic()
+
+filter(data, MoCA_CAT=="BAJO", VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  ggplot(aes(x = AMP_ROS, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color= "violet") +
   labs(x = "AMPLIFICACION", y = "EI") +  
   theme_classic()
   

@@ -9,6 +9,7 @@ data3 <- read_xlsx("Junto.xlsx",sheet = "Demo")
 
 
 data3$DECADA <- as.factor(data3$DECADA)
+data3$OCUPA_CAT <- as.factor(data3$OCUPA_CAT)
 data3$ESCOLARIDAD <-as.numeric(data3$ESCOLARIDAD)
 data3$IDARE_R_PUNTAJE <-as.numeric(data3$IDARE_R_PUNTAJE)
 data3$IDERE_R_PUNTAJE <-as.numeric(data3$IDERE_R_PUNTAJE)
@@ -36,6 +37,12 @@ aov(ESCOLARIDAD~DECADA, data=data3)%>%
   View()
 anova_test(EDAD~DECADA, data=data3)
 
+kruskal_test(EDAD~CRI_Total_CAT, data=data3)
+kruskalmc(EDAD~CRI_Total_CAT, data=data3)
+
+
+kruskal_test(OCUPA_CAT~DECADA, data=data3)
+kruskalmc(OCUPA_CAT~DECADA, data=data3)
 kruskal_test(MoCA~DECADA, data=data3)
 kruskalmc(MoCA~DECADA, data=data3)
 kruskal_test(IDARE_R_PUNTAJE~DECADA, data=data3)

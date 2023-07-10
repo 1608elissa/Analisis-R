@@ -12,7 +12,8 @@ data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
                                      "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
                                      "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
                                      "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
-                                     "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
+                                     "OCUPACION","OCUPA_CAT","OCUPACION_CAT",
+                                     "AMP_ROS","SUP_ROS")) %>%
   separate(cond_tip_est_val, c("COND","VD","TIPO", "VAL"), sep = "_")
 
 data$DECADA <- as.factor(data$DECADA)
@@ -70,6 +71,21 @@ grid.arrange(plot1, plot2, plot3)
 e <- filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")
 
 f <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = e)
+
+
+filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS") %>%
+  lm(formula= value ~ ESCOLARIDAD, data = .)%>%
+  summary()
+filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS") %>%
+  lm(formula= value ~ MoCA, data = .)%>%
+  summary()
+
+filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS") %>%
+  ggplot(aes(x = ESCOLARIDAD , y = value)) +
+  geom_point() + 
+  labs(x = "ESCOLARIDAD", y = "AMP") +  
+  geom_smooth(method = "lm", se = FALSE, color= "violet") +
+  theme_classic()
 
 step(object = f, direction = "both", trace = 1)
 
