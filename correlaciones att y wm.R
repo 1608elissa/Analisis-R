@@ -30,13 +30,6 @@ data %>%
          ESCOLARIDAD_CAT = as.factor(ESCOLARIDAD_CAT),
          MoCA_CAT = as.factor(MoCA_CAT))
 
-filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
-  ggplot(aes(x = AMP_ROS, y = value, colour = EDAD)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "AMPLIFICACION", y = "EI") +  
-  theme_classic()
-
 
 #### EDAD ####
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
@@ -48,13 +41,28 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   summary()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
-  ggplot(aes(x = EDAD, y = value)) +
+  ggplot(aes(x = AMP, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "EDAD", y = "EI") +  
+  labs(x = "EDAD", y = "EI rostros") +  
   theme_classic()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "EDAD", y = "EI escenas") +  
+  theme_classic()
+
+filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
+  lm(formula= value ~ EDAD , data =.)%>%
+  summary()
+
+filter(data, COND== "SUP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
+  lm(formula= value ~ EDAD, data =.)%>%
+  summary()
+
+filter(data, COND== "SUP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
@@ -62,12 +70,11 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   theme_classic()
 
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
-  lm(formula= value ~ EDAD, data =.)%>%
-  summary()
-
-filter(data, COND== "SUP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
-  lm(formula= value ~ EDAD, data =.)%>%
-  summary()
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "EDAD", y = "EI") +  
+  theme_classic()
 
 #### ESCOLARIDAD ####
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
@@ -106,7 +113,7 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   ggplot(aes(x = CRI_Total, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "CRI_Total", y = "EI") +  
+  labs(x = "CRI_Total", y = "EI escenas") +  
   theme_classic()
 
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
@@ -143,7 +150,7 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   ggplot(aes(x = IDERE_R_PUNTAJE, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "IDERE_R_PUNTAJE", y = "EI") +  
+  labs(x = "IDERE_R_PUNTAJE", y = "EI rostros") +  
   theme_classic()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
@@ -171,14 +178,14 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "MoCA", y = "EI") +  
+  labs(x = "MoCA", y = "EI rostros") +  
   theme_classic()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "MoCA", y = "EI") +  
+  labs(x = "MoCA", y = "EI escenas") +  
   theme_classic()
 
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
