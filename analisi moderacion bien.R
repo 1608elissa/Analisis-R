@@ -64,14 +64,25 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   summary()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
-  lm(formula= value ~ SUP_ROS * CRI_Total, data =.)%>%
+  lm(formula= value ~ SUP_ROS * CRI_Total_Z, data =.)%>%
   summary()
 
-filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS", CRI_Total_CAT=="BAJO")%>%
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS", CRI_Total_CAT=="BAJO")%>%
   lm(formula= value ~ SUP_ROS, data =.)%>%
   summary()
-filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS", CRI_Total_CAT=="ALTO")%>%
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS", CRI_Total_CAT=="ALTO")%>%
   lm(formula= value ~ SUP_ROS, data =.)%>%
+  summary()
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENASZ")%>%
+  lm(formula= value ~ SUP_ROSZ * CRI_Total_Z, data =.)%>%
+  summary()
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENASZ", CRI_Total_CAT=="BAJO")%>%
+  lm(formula= value ~ SUP_ROSZ, data =.)%>%
+  summary()
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENASZ", CRI_Total_CAT=="ALTO")%>%
+  lm(formula= value ~ SUP_ROSZ, data =.)%>%
   summary()
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%

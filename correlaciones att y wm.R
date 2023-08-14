@@ -8,12 +8,12 @@ library(gridExtra)
 data <- read_xlsx("Junto.xlsx",sheet = "Correlaciones")%>%
   gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
                                      "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
-                                     "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                     "CRI_Total","CRI_Total_CAT","CRI_Total_Z","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
                                      "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
                                      "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
                                      "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
                                      "OCUPACION","OCUPA_CAT","OCUPACION_CAT",
-                                     "AMP_ROS","SUP_ROS")) %>%
+                                     "AMP_ROS","SUP_ROS", "SUP_ROSZ")) %>%
   separate(cond_tip_est_val, c("COND","VD","TIPO", "VAL"), sep = "_")
 
 data %>%
