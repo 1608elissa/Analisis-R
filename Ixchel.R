@@ -65,3 +65,20 @@ aov(value ~ VAL*DECADA, data=d)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
+
+
+### MEDIAS ####
+library(psych)
+library(magrittr)
+
+filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA %in% c("20", "60")) %$%
+  describeBy(value, VAL)
+
+filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA %in% c("20", "60")) %$%
+  describeBy(value, DECADA)
+
+filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA=="20") %$%
+  describeBy(value, VAL)
+
+filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA=="60") %$%
+  describeBy(value, VAL)

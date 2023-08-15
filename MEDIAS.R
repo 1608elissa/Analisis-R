@@ -1,5 +1,5 @@
 library(psych)
-
+library(magrittr)
 
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS") %$%
   describeBy(value, DECADA)
