@@ -24,7 +24,7 @@ data %>%
 a<- filter(data, COND=="ROSTROS", VAL=="TOT", DECADA=="20")
 b<- filter(data, COND=="ROSTROS", VAL=="TOT", DECADA=="60")
 c<- filter(data, COND=="ROSTROS", VAL=="TOT", DECADA %in% c("20", "60"))
-d<- filter(data, COND=="ROSTROS", DECADA %in% c("20", "60"))
+d<- filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA %in% c("20", "60"))
 
 ### PRUEBAS DE NORMALIDAD Y HOMOGENEIDAD PARA SABER SI SE PUEDE USAR PARAMETRICA ####
 shapiro.test(c$value)
