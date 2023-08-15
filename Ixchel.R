@@ -24,6 +24,7 @@ data %>%
 a<- filter(data, COND=="ROSTROS", VAL=="TOT", DECADA=="20")
 b<- filter(data, COND=="ROSTROS", VAL=="TOT", DECADA=="60")
 c<- filter(data, COND=="ROSTROS", VAL=="TOT", DECADA %in% c("20", "60"))
+d<- filter(data, COND=="ROSTROS", DECADA %in% c("20", "60"))
 
 ### PRUEBAS DE NORMALIDAD Y HOMOGENEIDAD PARA SABER SI SE PUEDE USAR PARAMETRICA ####
 shapiro.test(c$value)
@@ -49,3 +50,18 @@ lm(formula = value ~ IDERE_R_PUNTAJE, data = c)%>%
   summary()
 lm(formula = value ~ IDERE_E_PUNTAJE, data = c)%>%
   summary()
+
+### CORRELACIONES ####
+cor.test(c$value, c$IDARE_R_PUNTAJE, method="spearman")
+cor.test(c$value, c$IDARE_E_PUNTAJE, method="spearman")
+cor.test(c$value, c$IDERE_R_PUNTAJE, method="spearman")
+cor.test(c$value, c$IDERE_E_PUNTAJE, method="spearman")
+
+### ANOVA ####
+aov(value ~ VAL*DECADA, data=d)%>%
+  summary()
+
+aov(value ~ VAL*DECADA, data=d)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
