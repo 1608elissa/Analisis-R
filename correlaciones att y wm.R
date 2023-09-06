@@ -36,6 +36,22 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   lm(formula= value ~ EDAD, data =.)%>%
   summary()
 
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col= "lightsalmon2") +
+  labs(x = "EDAD", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
+
+filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
+  ggplot(aes(x = EDAD, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col= "deepskyblue3") +
+  labs(x = "EDAD", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
+
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   lm(formula= value ~ EDAD, data =.)%>%
   summary()
@@ -112,9 +128,10 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   ggplot(aes(x = CRI_Total, y = value)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "CRI_Total", y = "EI escenas") +  
-  theme_classic()
+  geom_smooth(method = "lm", se = FALSE, col= "deepskyblue3") +
+  labs(x = "RESERVA COGNITIVA", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
 
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   lm(formula= value ~ CRI_Total, data =.)%>%
@@ -149,9 +166,10 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   ggplot(aes(x = IDERE_R_PUNTAJE, y = value)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "IDERE_R_PUNTAJE", y = "EI rostros") +  
-  theme_classic()
+  geom_smooth(method = "lm", se = FALSE, col= "lightsalmon2") +
+  labs(x = "DEPRESIÓN RASGO", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   lm(formula= value ~ IDERE_R_PUNTAJE, data =.)%>%
@@ -177,16 +195,18 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "MoCA", y = "EI rostros") +  
-  theme_classic()
+  geom_smooth(method = "lm", se = FALSE, col= "lightsalmon2") +
+  labs(x = "FUNCIÓN COGNITIVA", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic() + 
+  theme(axis.text = element_text(size=15))
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "MoCA", y = "EI escenas") +  
-  theme_classic()
+  geom_smooth(method = "lm", se = FALSE, col= "deepskyblue3") +
+  labs(x = "FUNCIÓN COGNITIVA", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
 
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   lm(formula= value ~ MoCA, data =.)%>%
@@ -226,6 +246,14 @@ filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   lm(formula= value ~ SUEÑO_2DA, data =.)%>%
   summary()
 
+filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
+  ggplot(aes(x = SUEÑO_2DA, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col= "green4") +
+  labs(x = "SUEÑO SESIÓN", y = "AMPLIFICACIÓN") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
+
 filter(data, COND== "SUP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   lm(formula= value ~ SUEÑO_2DA, data =.)%>%
   summary()
@@ -238,9 +266,10 @@ filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ROSTROS")%>%
   ggplot(aes(x = OCUPA_CAT, y = value)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "OCUPA_CAT", y = "EI") +  
-  theme_classic()
+  geom_smooth(method = "lm", se = FALSE, col= "lightsalmon2") +
+  labs(x = "OCUPACIÓN", y = "ÍNDICE EFICIENCIA INVERSA") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
 
 filter(data, VD == "EIDP", COND== "DP", VAL=="TOT", TIPO=="ESCENAS")%>%
   lm(formula= value ~ OCUPA_CAT, data =.)%>%
@@ -253,9 +282,10 @@ filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
 filter(data, COND== "AMP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   ggplot(aes(x = OCUPA_CAT, y = value)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "OCUPA_CAT", y = "EI") +  
-  theme_classic()
+  geom_smooth(method = "lm", se = FALSE, col= "green4") +
+  labs(x = "OCUPACIÓN", y = "AMPLIFICACIÓN") +  
+  theme_classic()+ 
+  theme(axis.text = element_text(size=15))
 
 filter(data, COND== "SUP", VD == "DUR", VAL=="TOT", TIPO=="ROS")%>%
   lm(formula= value ~ OCUPA_CAT, data =.)%>%
