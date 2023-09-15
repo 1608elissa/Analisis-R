@@ -46,3 +46,15 @@ filter(data, VAR=="IE") %>%
   guides(fill = guide_legend(title = "Condition:"))
 
 
+
+filter(data, VAR=="ACC") %>%
+  ezANOVA(data=., dv=value, wid =ID, within=COND)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data, VAR=="RT") %>%
+  ezANOVA(data=., dv=value, wid =ID, within=COND)
+
+filter(data, VAR=="IE") %>%
+  ezANOVA(data=., dv=value, wid =ID, within=COND)
