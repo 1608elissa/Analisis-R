@@ -552,3 +552,61 @@ filter(data2, TIPO=="ESCENAS",!SHIPLEY_CAT == "MEDIO")%>%
 filter(data2, !CRI_Total_CAT == "MEDIO")%>%
   lm(formula= SUP_ROS ~ CRI_Total_CAT*EDAD, data = .)%>%
   summary()
+
+
+##### DESCRIPTIVOS DE LA MUESTRA ####
+data$DECADA <- as.factor(data$DECADA)
+
+filter(data, TIPO=="ROSTROS")%>%
+  aov(value ~ DECADA, data =.)%>%
+  summary()
+
+filter(data, TIPO=="ROSTROS")%>%
+  aov(value ~ DECADA, data =.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data, TIPO=="ESCENAS")%>%
+  aov(value ~ DECADA, data =.)%>%
+  summary()
+
+filter(data, TIPO=="ESCENAS")%>%
+  aov(value ~ DECADA, data =.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+aov(AMP_ROS ~ DECADA, data = data)%>%
+  summary()
+
+aov(AMP_ROS ~ DECADA, data = data)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+aov(SUP_ROS ~ DECADA, data = data)%>%
+  summary()
+
+aov(SUP_ROS ~ DECADA, data = data)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+library(psych)
+library(magrittr)
+
+filter(data, TIPO=="ROSTROS") %$%
+  describeBy(value, DECADA)
+
+filter(data, TIPO=="ESCENAS") %$%
+  describeBy(value, DECADA)
+
+filter(data) %$%
+  describeBy(AMP_ROS, DECADA)
+
+filter(data) %$%
+  describeBy(SUP_ROS, DECADA)
+
+
+  

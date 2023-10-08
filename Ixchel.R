@@ -51,6 +51,24 @@ lm(formula = value ~ IDERE_R_PUNTAJE, data = c)%>%
 lm(formula = value ~ IDERE_E_PUNTAJE, data = c)%>%
   summary()
 
+filter(c, DECADA=="20")%>%
+  lm(formula = value ~ IDARE_R_PUNTAJE)%>%
+  summary()
+
+filter(c, DECADA=="60")%>%
+  lm(formula = value ~ IDARE_R_PUNTAJE)%>%
+  summary()
+  
+filter(c, DECADA=="20")%>%
+  lm(formula = value ~ IDARE_E_PUNTAJE)%>%
+  summary()
+
+filter(c, DECADA=="60")%>%
+  lm(formula = value ~ IDARE_E_PUNTAJE)%>%
+  summary()
+
+
+
 ### CORRELACIONES ####
 cor.test(c$value, c$IDARE_R_PUNTAJE, method="spearman")
 cor.test(c$value, c$IDARE_E_PUNTAJE, method="spearman")
@@ -82,3 +100,45 @@ filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA=="20") %$%
 
 filter(data, COND=="ROSTROS", !VAL=="TOT", DECADA=="60") %$%
   describeBy(value, VAL)
+
+### GRÁFICAS #### 
+
+c$DECADA<-as.factor(c$DECADA)
+
+ggplot(c, aes(x = DECADA, y = IDARE_R_PUNTAJE, fill= DECADA)) + 
+  geom_boxplot() + theme_classic()+ theme(legend.position = "none") +
+  scale_fill_brewer(palette="Pastel1") +
+  labs(x = "DÉCADA", y = "Puntaje", title = "Ansiedad Rasgo")
+
+ggplot(c, aes(x = DECADA, y = IDARE_E_PUNTAJE, fill= DECADA)) + 
+  geom_boxplot() + theme_classic()+ theme(legend.position = "none") +
+  scale_fill_brewer(palette="Pastel1") +
+  labs(x = "DÉCADA", y = "Puntaje", title = "Ansiedad Estado")
+
+ggplot(c, aes(x = DECADA, y = value, fill= DECADA)) + 
+  geom_boxplot() + theme_classic()+ theme(legend.position = "none") +
+  scale_fill_brewer(palette="Pastel1") +
+  labs(x = "DÉCADA", y = "d'", title = "Eficiencia Memoria de Trabajo")
+
+ggplot(c, aes(x = IDARE_R_PUNTAJE, y = value)) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE, color = "#63B8FF", lwd = 1.5) +
+  labs(x = "Ansiedad Rasgo", y = "d'", title = "Eficiencia Memoria de Trabajo") +  
+  theme_classic()
+
+ggplot(c, aes(x = IDARE_E_PUNTAJE, y = value)) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE, color = "#63B8FF", lwd = 1.5) +
+  labs(x = "Ansiedad Estado", y = "d'", title = "Eficiencia Memoria de Trabajo") +  
+  theme_classic()
+
+filter(c, DECADA=="20")%>%
+  ggplot(aes(x = IDARE_R_PUNTAJE, y = value)) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE, color = "#63B8FF", lwd = 1.5) +
+  labs(x = "Ansiedad Rasgo", y = "d'", title = "Eficiencia Memoria de Trabajo - Jóvenes") +  
+  theme_classic()
+
+filter(c, DECADA=="60")%>%
+  ggplot(aes(x = IDARE_E_PUNTAJE, y = value)) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE, color = "#63B8FF", lwd = 1.5) +
+  labs(x = "Ansiedad Estado", y = "d'", title = "Eficiencia Memoria de Trabajo - Mayores") +  
+  theme_classic()
+  
