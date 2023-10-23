@@ -529,7 +529,8 @@ filter(data2, COND== "ESCENAS", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
 
 filter(data2, COND== "ESCENAS", !EDAD_CAT=="MEDIO") %$%
-  aov(value ~ SUP_ROS*EDAD_CAT, data =.)
+  aov(value ~ SUP_ROS*EDAD_CAT, data =.)%>%
+  summary()
 
 
 
@@ -543,7 +544,8 @@ filter(data2, COND== "ROSTROS", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
 
 filter(data2, COND== "ROSTROS", !SUEÑO_NOR_CAT=="MEDIO") %$%
-  aov(value ~ EDAD_Z*SUEÑO_NOR_CAT, data =.)
+  aov(value ~ EDAD_Z*SUEÑO_NOR_CAT, data =.)%>%
+  summary()
 
 
 ### ESCENAS
@@ -554,10 +556,12 @@ filter(data2, COND== "ESCENAS", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
 
 filter(data2, COND== "ESCENAS", !IDERE_E_CAT=="MEDIO") %$%
-  aov(value ~ EDAD_Z*IDERE_E_CAT, data =.)
+  aov(value ~ EDAD_Z*IDERE_E_CAT, data =.)%>%
+  summary()
 
 filter(data2, COND== "ESCENAS", !SHIPLEY_CAT=="MEDIO") %$%
-  aov(value ~ EDAD_Z*SHIPLEY_CAT, data =.)
+  aov(value ~ EDAD_Z*SHIPLEY_CAT, data =.)%>%
+  summary()
 
 
 ### AMPLIFICACION
@@ -577,7 +581,8 @@ filter(data2, !SUEÑO_2DA_CAT=="MEDIO") %$%
   wilcox.test(AMP_ROS_Z ~ SUEÑO_2DA_CAT, data =.)
 
 filter(data2, !CRI_Total_CAT=="MEDIO") %$%
-  aov(AMP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)
+  aov(AMP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)%>%
+  summary()
 
 
 ### SUPRESION
@@ -585,13 +590,16 @@ filter(data2, !IDERE_E_CAT=="MEDIO") %$%
   wilcox.test(SUP_ROS_Z ~ IDERE_E_CAT, data =.)
 
 filter(data2, !CRI_Total_CAT=="MEDIO") %$%
-  aov(SUP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)
+  aov(SUP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)%>%
+  summary()
 
 filter(data2, !MoCA_CAT=="MEDIO") %$%
-  aov(SUP_ROS_Z ~ EDAD_Z*MoCA_CAT, data =.)
+  aov(SUP_ROS_Z ~ EDAD_Z*MoCA_CAT, data =.)%>%
+  summary()
 
 filter(data2, !SUEÑO_2DA_CAT=="MEDIO") %$%
-  aov(SUP_ROS_Z ~ EDAD_Z*SUEÑO_2DA_CAT, data =.)
+  aov(SUP_ROS_Z ~ EDAD_Z*SUEÑO_2DA_CAT, data =.)%>%
+  summary()
 
 
 
