@@ -3,6 +3,8 @@ library(rstatix)
 library(tidyverse)
 library(magrittr)
 library(gridExtra)
+library(psych)
+library(magrittr)
 
 #### BASE DE DATOS ####
 data <- read_xlsx("Junto.xlsx",sheet = "PuntajeZ")%>%
@@ -53,6 +55,16 @@ summary(modeloSUP)
 
 #### REGRESIONES SIMPLES ####
 
+## ATT CON WM ##
+filter(data, TIPO=="ROSTROS")%>%
+  lm(formula= value ~ AMP_ROS, data =.)%>%
+  summary()
+
+filter(data, TIPO=="ESCENAS")%>%
+  lm(formula= value ~ SUP_ROS, data =.)%>%
+  summary()
+
+## VARIABLES ##
 filter(data, TIPO=="ROSTROS")%>%
   lm(formula= value ~ EDAD, data =.)%>%
   summary()
@@ -484,77 +496,107 @@ lm(formula= SUP_ROS ~ SHIPLEY*EDAD, data = data)%>%
   summary()
 
 #### ANALISIS CON GRUPOS ####
-data2 <- read_xlsx("Junto.xlsx",sheet = "GpoZ")%>%
-  gather(cond_tip_est_val, value, -c("ID","DECADA", "SEXO","EDAD", "MoCA", 
-                                     "MoCA_CAT", "CRI_Total","CRI_Total_CAT",  
-                                     "IDARE_E_PUNTAJE","IDARE_E_CAT",
-                                     "IDERE_E_PUNTAJE","IDERE_E_CAT", "SHIPLEY",
-                                     "SHIPLEY_CAT","SUEÑO_NOR","SUEÑONOR_CAT",
-                                     "SUEÑO_2DA","SUEÑO2_CAT","OCUPA_CAT",
-                                     "OCUPACION_CAT","AMP_ROS","SUP_ROS")) %>%
-  separate(cond_tip_est_val, c("COND","VD","TIPO", "VAL"), sep = "_")
-
-data2 %>%
-  mutate(DECADA = as.factor(DECADA),
-         SEXO = as.factor(SEXO),
-         VD = as.factor(VD),
-         COND = as.factor(COND),
-         VAL = as.factor(VAL),
-         TIPO = as.factor(TIPO))
-
+data2 <- read_xlsx("Junto.xlsx",sheet = "Regresiones")%>%
+  gather(var_cond_tipo, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT","MoCA","MoCA_Z",
+                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT","CRI_Total","CRI_Total_Z","CRI_Total_CAT",
+                                  "IDARE_R_PUNTAJE","IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE",
+                                  "IDERE_R_Z","IDERE_R_CAT","IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY","SHIPLEY_Z",
+                                  "SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
+                                  "OCUPACION","OCUPA_CAT","OCUPA_Z","OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
+  separate(var_cond_tipo, c("VAR","COND","TIPO"), sep = "_")
 
 ### ANALISIS DE VARIABLES CON ESCENAS/SUPRESION Y ROSTROS/AMPLIFICACION
-filter(data2, TIPO=="ESCENAS")%>%
-  lm(formula= value ~ SUP_ROS*CRI_Total_CAT, data = .)%>%
-  summary()
 
-filter(data2, TIPO=="ESCENAS", CRI_Total_CAT=="BAJO")%>%
-  lm(formula= value ~ SUP_ROS, data = .)%>%
-  summary()
+### AMPLIFICACION - ROSTROS 
+filter(data2, COND== "ROSTROS", !EDAD_CAT=="MEDIO") %$%
+  wilcox.test(value ~ EDAD_CAT, data =.)
+
+filter(data2, COND== "ROSTROS", !MoCA_CAT=="MEDIO") %$%
+  wilcox.test(value ~ MoCA_CAT, data =.)
+
+
+### SUPRESION - ESCENAS 
+filter(data2, COND== "ESCENAS", !EDAD_CAT=="MEDIO") %$%
+  wilcox.test(value ~ EDAD_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !CRI_Total_CAT=="MEDIO") %$%
+  wilcox.test(value ~ CRI_Total_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !IDARE_E_CAT=="MEDIO") %$%
+  wilcox.test(value ~ IDARE_E_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !MoCA_CAT=="MEDIO") %$%
+  wilcox.test(value ~ MoCA_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !EDAD_CAT=="MEDIO") %$%
+  aov(value ~ SUP_ROS*EDAD_CAT, data =.)
+
 
 
 ### ANALISIS DE VARIABLES CON EDAD
-filter(data2, TIPO=="ROSTROS")%>%
-  lm(formula= value ~ SUEÑONOR_CAT*EDAD, data = .)%>%
-  summary()
 
-filter(data2, TIPO=="ROSTROS", !SUEÑONOR_CAT=="MEDIO" )%>%
-  lm(formula= value ~ SUEÑONOR_CAT*EDAD, data = .)%>%
-  summary()
+### ROSTROS
+filter(data2, COND== "ROSTROS", !CRI_Total_CAT=="MEDIO") %$%
+  wilcox.test(value ~ CRI_Total_CAT, data =.)
 
-lm(formula= AMP_ROS ~ CRI_Total_CAT*EDAD, data = data2)%>%
-  summary()
+filter(data2, COND== "ROSTROS", !MoCA_CAT=="MEDIO") %$%
+  wilcox.test(value ~ MoCA_CAT, data =.)
 
-filter(data2, TIPO=="ESCENAS", !CRI_Total_CAT=="MEDIO")%>%
-  lm(formula= AMP_ROS ~ CRI_Total_CAT*EDAD, data = .)%>%
-  summary()
-
-filter(data2, !CRI_Total_CAT=="MEDIO")%>%
-  lm(formula= value ~ CRI_Total_CAT*EDAD, data = .)%>%
-  summary()
-
-filter(data2, TIPO=="ESCENAS")%>%
-  lm(formula= value ~ IDERE_E_CAT*EDAD, data = .)%>%
-  summary()
-
-filter(data2, TIPO=="ESCENAS", !IDERE_E_CAT == "MEDIO")%>%
-  lm(formula= value ~ IDERE_E_CAT*EDAD, data = .)%>%
-  summary()
-
-filter(data2, TIPO=="ESCENAS", !IDERE_E_CAT == "BAJO")%>%
-  lm(formula= value ~ IDERE_E_CAT*EDAD, data = .)%>%
-  summary()
-
-filter(data2, TIPO=="ESCENAS",!SHIPLEY_CAT == "MEDIO")%>%
-  lm(formula= value ~ SHIPLEY_CAT*EDAD, data = .)%>%
-  summary()
-
-filter(data2, !CRI_Total_CAT == "MEDIO")%>%
-  lm(formula= SUP_ROS ~ CRI_Total_CAT*EDAD, data = .)%>%
-  summary()
+filter(data2, COND== "ROSTROS", !SUEÑO_NOR_CAT=="MEDIO") %$%
+  aov(value ~ EDAD_Z*SUEÑO_NOR_CAT, data =.)
 
 
-##### DESCRIPTIVOS DE LA MUESTRA ####
+### ESCENAS
+filter(data2, COND== "ESCENAS", !IDARE_E_CAT=="MEDIO") %$%
+  wilcox.test(value ~ IDARE_E_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !MoCA_CAT=="MEDIO") %$%
+  wilcox.test(value ~ MoCA_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !IDERE_E_CAT=="MEDIO") %$%
+  aov(value ~ EDAD_Z*IDERE_E_CAT, data =.)
+
+filter(data2, COND== "ESCENAS", !SHIPLEY_CAT=="MEDIO") %$%
+  aov(value ~ EDAD_Z*SHIPLEY_CAT, data =.)
+
+
+### AMPLIFICACION
+filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ ESCOLARIDAD_CAT, data =.)
+
+filter(data2, !CRI_Total_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ CRI_Total_CAT, data =.)
+
+filter(data2, !IDARE_E_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ IDARE_E_CAT, data =.)
+
+filter(data2, !IDERE_R_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ IDERE_R_CAT, data =.)
+
+filter(data2, !SUEÑO_2DA_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ SUEÑO_2DA_CAT, data =.)
+
+filter(data2, !CRI_Total_CAT=="MEDIO") %$%
+  aov(AMP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)
+
+
+### SUPRESION
+filter(data2, !IDERE_E_CAT=="MEDIO") %$%
+  wilcox.test(SUP_ROS_Z ~ IDERE_E_CAT, data =.)
+
+filter(data2, !CRI_Total_CAT=="MEDIO") %$%
+  aov(SUP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)
+
+filter(data2, !MoCA_CAT=="MEDIO") %$%
+  aov(SUP_ROS_Z ~ EDAD_Z*MoCA_CAT, data =.)
+
+filter(data2, !SUEÑO_2DA_CAT=="MEDIO") %$%
+  aov(SUP_ROS_Z ~ EDAD_Z*SUEÑO_2DA_CAT, data =.)
+
+
+
+
+#### DESCRIPTIVOS DE LA MUESTRA #####
 data$DECADA <- as.factor(data$DECADA)
 
 filter(data, TIPO=="ROSTROS")%>%
@@ -593,8 +635,6 @@ aov(SUP_ROS ~ DECADA, data = data)%>%
   filter(p.adj < 0.05)%>%
   View()
 
-library(psych)
-library(magrittr)
 
 filter(data, TIPO=="ROSTROS") %$%
   describeBy(value, DECADA)
@@ -609,4 +649,34 @@ filter(data) %$%
   describeBy(SUP_ROS, DECADA)
 
 
-  
+anova_test(SUEÑO_NOR~DECADA, data=data)
+aov(SUEÑO_NOR~DECADA, data=data)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data) %$%
+  describeBy(SUEÑO_NOR, DECADA)
+
+anova_test(SUEÑO_2DA~DECADA, data=data)
+aov(SUEÑO_2DA~DECADA, data=data)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data) %$%
+  describeBy(SUEÑO_2DA, DECADA)
+
+filter(data, COND=="ROSTROS", TIPO=="TOT") %$%
+  describeBy(value, DECADA)
+
+filter(data, COND=="ESCENAS", TIPO=="TOT") %$%
+  describeBy(value, DECADA)
+
+filter(data) %$%
+  describeBy(AMP_ROS, DECADA)
+
+filter(data) %$%
+  describeBy(SUP_ROS, DECADA)
+
+
