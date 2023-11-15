@@ -22,32 +22,32 @@ ggplot(data = data, aes(x = EDAD, y = AMP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
   labs(x = "AGE", y = "ENHANCEMENT INDEX") +  
   theme_classic()+ 
-  theme(axis.text = element_text(size=12)) + 
+  theme(text = element_text(size=15)) + 
   scale_y_continuous(breaks = seq(-2.5, 2.5))
 
 ggplot(data = data, aes(x = EDAD, y = SUP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
   labs(x = "AGE", y = "SUPPRESSION INDEX") +  
   theme_classic()+ 
-  theme(axis.text = element_text(size=12)) + 
+  theme(text = element_text(size=15)) + 
   scale_y_continuous(breaks = seq(-2.5, 2.5))
 
 filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
-  labs(x = "AGE", y = "WORKING MEMORY EFFICIENCY-ATTEND FACES (IEI)") +  
+  labs(x = "AGE", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +  
   theme_classic()+ 
-  theme(axis.text = element_text(size=13)) + 
+  theme(text = element_text(size=15)) + 
   scale_y_continuous(breaks = seq(-2, 5))
 
 filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
-  labs(x = "AGE", y = "WORKING MEMORY EFFICIENCY-IGNORE FACES (IEI)") +  
+  labs(x = "AGE", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +  
   theme_classic()+ 
-  theme(axis.text = element_text(size=13)) + 
+  theme(text = element_text(size=15)) + 
   scale_y_continuous(breaks = seq(-2, 5))
 
 
