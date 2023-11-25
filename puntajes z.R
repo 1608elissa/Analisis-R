@@ -24,33 +24,58 @@ data %>%
          VAL = as.factor(VAL),
          TIPO = as.factor(TIPO))
 
-#### MODELOS ####
-e <- filter(data, TIPO=="ROSTROS")
 
-f <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = e)
+##### ANOVAS #####
+data1 <- read_xlsx("Junto.xlsx",sheet = "anovas")%>%
+  gather(cond_tip_est_val, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT",
+                                     "MoCA","MoCA_Z","MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z",
+                                     "ESCOLARIDAD_CAT","CRI_Total","CRI_Total_Z","CRI_Total_CAT",
+                                     "IDARE_R_PUNTAJE","IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE",
+                                     "IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE","IDERE_R_Z","IDERE_R_CAT",
+                                     "IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY",
+                                     "SHIPLEY_Z","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT",
+                                     "SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT","OCUPACION","OCUPA_CAT","OCUPA_Z",	
+                                     "OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
+  separate(cond_tip_est_val, c("VD","COND","TIPO"), sep = "_")
 
-step(object = f, direction = "both", trace = 1)
 
-modeloROS <- (lm(formula = value ~ EDAD + ESCOLARIDAD + MoCA + CRI_Total + 
-                   EDAD:ESCOLARIDAD + EDAD:MoCA + EDAD:CRI_Total + ESCOLARIDAD:CRI_Total + 
-                   MoCA:CRI_Total + EDAD:ESCOLARIDAD:CRI_Total + EDAD:MoCA:CRI_Total, 
-                 data = e))
-summary(modeloROS)
+data1$DECADA <- as.factor(data1$DECADA)
+data1$SEXO <- as.factor(data1$SEXO)
+data1$COND <- as.factor(data1$COND)
+data1$VD <- as.factor(data1$VD)
+data1$TIPO <- as.factor(data1$TIPO)
 
-g <- filter(data, TIPO=="ESCENAS")
 
-h <- lm(formula= value ~ EDAD*ESCOLARIDAD*MoCA*CRI_Total, data = g)
+filter(data1, TIPO== "Z") %>%
+  aov(value ~ COND*DECADA, data=.)%>%
+  summary()
 
-step(object = h, direction = "both", trace = 1)
+filter(data1, DPRIMA== "DPR", !VAL=="TOT") %>%
+  aov(value~COND*DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+	
+data1 <- read_xlsx("Junto.xlsx",sheet = "D_PRIMA")%>%
+  gather(tip_cond_val, value, -c("ID","DECADA", "SEXO", "EDAD","EDAD_CAT", "MoCA", 
+                                 "MoCA_CAT","ESCOLARIDAD", "ESCOLARIDAD_CAT",
+                                 "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
+                                 "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
+                                 "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
+                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
+  separate(tip_cond_val, c("DPRIMA","COND","VAL"),
+           sep = "_")
 
-modeloESC <- (lm(formula = value ~ EDAD * ESCOLARIDAD * MoCA * CRI_Total, data = g))
-summary(modeloESC)
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
+  aov(value ~ DECADA*COND*VAL, data=.)%>%
+  summary()
 
-modeloAMP <- (lm(formula = AMP_ROS ~ EDAD * ESCOLARIDAD * MoCA * CRI_Total, data = data))
-summary(modeloAMP)
-
-modeloSUP <- (lm(formula = SUP_ROS ~ EDAD + ESCOLARIDAD + MoCA + CRI_Total, data = data))
-summary(modeloSUP)
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
+  aov(value~ DECADA*COND*VAL, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
 
 
 #### REGRESIONES SIMPLES ####

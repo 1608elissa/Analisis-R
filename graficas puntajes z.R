@@ -36,7 +36,7 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
-  labs(x = "AGE", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +  
+  labs(x = "AGE", y = "WME/AF") +  
   theme_classic()+ 
   theme(text = element_text(size=15)) + 
   scale_y_continuous(breaks = seq(-2, 5))
@@ -45,7 +45,7 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
-  labs(x = "AGE", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +  
+  labs(x = "AGE", y = "WME/IF") +  
   theme_classic()+ 
   theme(text = element_text(size=15)) + 
   scale_y_continuous(breaks = seq(-2, 5))
@@ -55,9 +55,9 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = value, y = AMP_ROS)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#CD5555", lwd = 1.5) +
-  labs(x = "WORKING MEMORY EFFICIENCY-IGNORE FACES (IEI)", y = "ENHANCEMENT INDEX") +  
+  labs(x = "WME/IF", y = "ENHANCEMENT INDEX") +  
   theme_classic()+ 
-  theme(axis.text = element_text(size=13))+ 
+  theme(text = element_text(size=15))+ 
   scale_y_continuous(breaks = seq(-2.5, 2.5)) +
   scale_x_continuous(breaks = seq(-2, 5))
 
@@ -65,9 +65,9 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = value, y = SUP_ROS)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#CD5555", lwd = 1.5) +
-  labs(x = "WORKING MEMORY EFFICIENCY-IGNORE FACES (IEI)", y = "SUPPRESSION INDEX") +  
+  labs(x = "WME/IF", y = "SUPPRESSION INDEX") +  
   theme_classic()+ 
-  theme(axis.text = element_text(size=13)) +
+  theme(text = element_text(size=15)) +
   scale_y_continuous(breaks = seq(-2.5, 2.5)) +
   scale_x_continuous(breaks = seq(-2, 5))
 
@@ -100,7 +100,7 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B636C", lwd = 1.5) +
-  labs(x = "AGE", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +  
+  labs(x = "AGE", y = "WME/AF") +  
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
@@ -108,7 +108,7 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
-  labs(x = "COGNITIVE FUNCTION", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +  
+  labs(x = "CogFun", y = "WME/AF") +  
   theme_classic()+ 
   theme(text = element_text(size = 15)) 
 
@@ -117,7 +117,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="BuPu") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "AGE GROUP", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +
+  labs(x = "Age Group", y = "WME/AF") +
   theme_classic()+ 
   theme(legend.position = "none") +
   theme(text = element_text(size = 15))
@@ -127,7 +127,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="PuRd") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE FUNCTION GROUP", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +
+  labs(x = "CogFun Group", y = "WME/AF") +
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
@@ -140,7 +140,7 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = EDAD, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B636C", lwd = 1.5) +
-  labs(x = "AGE", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +  
+  labs(x = "Age", y = "WME/IF") +  
   ylim (-1, 3) +
   theme_classic()+ 
   theme(text = element_text(size = 15))
@@ -149,7 +149,7 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = CRI_Total, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B5A00", lwd = 1.5) +
-  labs(x = "COGNITIVE RESERVE", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +  
+  labs(x = "CogRes", y = "WME/IF") +  
   xlim (-1,2) + ylim (-1, 3) +
   theme_classic()+ 
   theme(text = element_text(size = 15))
@@ -158,7 +158,7 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
-  labs(x = "COGNITIVE FUNCTION", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +  
+  labs(x = "CogFun", y = "WME/IF") +  
   ylim (-1, 3) +
   theme_classic()+ 
   theme(text = element_text(size = 15)) 
@@ -167,7 +167,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO")%>%
   ggplot(aes(x = SUP_ROS_Z, y = value, colour= CRI_Total_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "SUPPRESSION INDEX", y = "WM ATTEND SCENES/IGNORE FACES (IEI)", color = "CRI_Total_CAT") +
+  labs(x = "SUPPRESSION INDEX", y = "WME/IF", color = "CRI_Total_CAT") +
   ylim (-1, 3) +
   theme_classic()+ 
   theme(text = element_text(size = 15))
@@ -177,7 +177,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="BuPu") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "AGE GROUP", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +
+  labs(x = "Age Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
@@ -188,7 +188,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="RdPu") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE RESERVE GROUP", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +
+  labs(x = "CogRes Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
@@ -199,7 +199,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="PuRd") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE FUNCTION GROUP", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +
+  labs(x = "CogFun Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
@@ -213,7 +213,7 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = CRI_Total, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B5A00", lwd = 1.5) +
-  labs(x = "COGNITIVE RESERVE", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +  
+  labs(x = "CogRes", y = "WME/AF") +  
   theme_classic()+ 
   theme(text = element_text(size = 15)) 
 
@@ -221,7 +221,7 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
-  labs(x = "COGNITIVE FUNCTION", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +  
+  labs(x = "CogFun", y = "WME/AF") +  
   theme_classic()+ 
   theme(text = element_text(size = 15)) 
 
@@ -230,7 +230,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="RdPu") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE RESERVE GROUP", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +
+  labs(x = "CogRes Group", y = "WME/AF") +
   theme_classic()+ 
   theme(legend.position = "none") +
   theme(text = element_text(size = 15))
@@ -240,7 +240,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="PuRd") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE FUNCTION GROUP", y = "WM ATTEND FACES/IGNORE SCENES (IEI)") +
+  labs(x = "CogFun Group", y = "WME/AF") +
   theme_classic()+ 
   theme(legend.position = "none") +
   theme(text = element_text(size = 15))
@@ -253,7 +253,7 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = IDARE_E_PUNTAJE, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#008B8B", lwd = 1.5) +
-  labs(x = "STATE ANXIETY", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +  
+  labs(x = "SAnx", y = "WME/IF") +  
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
@@ -261,7 +261,7 @@ filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = MoCA, y = value)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
-  labs(x = "COGNITIVE FUNCTION", y = "WWM ATTEND SCENES/IGNORE FACES (IEI)") +  
+  labs(x = "CogFun", y = "WME/IF") +  
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
@@ -269,7 +269,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = value, colour= IDERE_E_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "AGE", y = "WM ATTEND SCENES/IGNORE FACES (IEI)", color = "IDERE_E_CAT") +
+  labs(x = "Age", y = "WME/IF", color = "IDERE_E_CAT") +
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
@@ -277,7 +277,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !SHIPLEY_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = value, colour= SHIPLEY_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "AGE", y = "WM ATTEND SCENES/IGNORE FACES (IEI)", color = "SHIPLEY_CAT") +
+  labs(x = "Age", y = "WME/IF", color = "SHIPLEY_CAT") +
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
@@ -286,7 +286,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !IDARE_E_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="Greens") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "STATE ANXIETY GROUP", y = "WORKING MEMORY EFFICIENCY-IGNORE FACES (IEI)") +
+  labs(x = "SAnx Group", y = "WME/IF") +
   theme_classic()+ 
   theme(legend.position = "none") +
   theme(text = element_text(size = 15))
@@ -296,7 +296,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="PuRd") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE FUNCTION GROUP", y = "WM ATTEND SCENES/IGNORE FACES (IEI)") +
+  labs(x = "CogFun Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
@@ -308,13 +308,13 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
 
 ggplot(data = data, aes(x = ESCOLARIDAD, y = AMP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#5F9EA0", lwd = 1.5) +
-  labs(x = "YEARS OF SCHOOLING", y = "ENHANCEMENT INDEX") +  
+  labs(x = "YS", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
   theme(text = element_text(size = 15))
 
 ggplot(data = data, aes(x = CRI_Total, y = AMP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#8B5A00", lwd = 1.5) +
-  labs(x = "COGNITIVE RESERVE", y = "ENHANCEMENT INDEX") +  
+  labs(x = "CogRes", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
   theme(text = element_text(size = 15))
 
@@ -322,7 +322,7 @@ filter(data2, !CRI_Total_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = AMP_ROS_Z, colour= CRI_Total_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "AGE", y = "ENHANCEMENT INDEX", color = "CRI_CAT") +
+  labs(x = "Age", y = "ENHANCEMENT INDEX", color = "CRI_CAT") +
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
@@ -331,7 +331,7 @@ filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="Reds") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "YEARS SCHOOLING GROUP", y = "ENHANCEMENT INDEX") +
+  labs(x = "YS Group", y = "ENHANCEMENT INDEX") +
   theme_classic()+ 
   theme(legend.position = "none") +
   ylim (-2, 2) +
@@ -342,7 +342,7 @@ filter(data2, !CRI_Total_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="RdPu") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "COGNITIVE RESERVE GROUP", y = "ENHANCEMENT INDEX", cex.lab = 60) +
+  labs(x = "CogRes Group", y = "ENHANCEMENT INDEX", cex.lab = 60) +
   theme_classic()+ 
   theme(legend.position = "none") +
   ylim (-2, 2) +
@@ -357,7 +357,7 @@ filter(data2, !CRI_Total_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = SUP_ROS_Z, colour= CRI_Total_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "AGE", y = "SUPPRESSION INDEX", color = "CRI_CAT") +
+  labs(x = "Age", y = "SUPPRESSION INDEX", color = "CRI_CAT") +
   theme_classic()+ 
   ylim (-2, 2) +
   theme(text = element_text(size = 15))
@@ -366,7 +366,7 @@ filter(data2, !SUEÑO_2DA_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = SUP_ROS_Z, colour= SUEÑO_2DA_CAT)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "AGE", y = "SUPPRESSION INDEX", color = "SLEEP-SES_CAT") +
+  labs(x = "Age", y = "SUPPRESSION INDEX", color = "SLEEP-SES_CAT") +
   theme_classic()+ 
   theme(text = element_text(size = 15))
 
