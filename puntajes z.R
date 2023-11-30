@@ -14,14 +14,13 @@ data <- read_xlsx("Junto.xlsx",sheet = "PuntajeZ")%>%
                                      "IDERE_E_PUNTAJE","COVID_CAT", "SHIPLEY",
                                      "SUEÑO_NOR","SUEÑO_2DA","OCUPA_CAT",
                                      "AMP_ROS","SUP_ROS")) %>%
-  separate(cond_tip_est_val, c("COND","VD","TIPO", "VAL"), sep = "_")
+  separate(cond_tip_est_val, c("VAR","TIPO", "Z"), sep = "_")
+
 
 data %>%
   mutate(DECADA = as.factor(DECADA),
          SEXO = as.factor(SEXO),
-         VD = as.factor(VD),
-         COND = as.factor(COND),
-         VAL = as.factor(VAL),
+         VAR = as.factor(VAR),
          TIPO = as.factor(TIPO))
 
 
@@ -34,10 +33,9 @@ data1 <- read_xlsx("Junto.xlsx",sheet = "anovas")%>%
                                      "IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE","IDERE_R_Z","IDERE_R_CAT",
                                      "IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY",
                                      "SHIPLEY_Z","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT",
-                                     "SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT","OCUPACION","OCUPA_CAT","OCUPA_Z",	
-                                     "OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
+                                     "SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT","OCUPACION","OCUPAC_CAT",
+                                     "OCUPA_Z","OCUPA_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
   separate(cond_tip_est_val, c("VD","COND","TIPO"), sep = "_")
-
 
 data1$DECADA <- as.factor(data1$DECADA)
 data1$SEXO <- as.factor(data1$SEXO)
@@ -46,11 +44,51 @@ data1$VD <- as.factor(data1$VD)
 data1$TIPO <- as.factor(data1$TIPO)
 
 
+filter(data1, COND== "ROSTROS", TIPO== "TOT") %>%
+  aov(value ~ DECADA, data=.)%>%
+  summary()
+
+filter(data1, COND== "ROSTROS", TIPO== "TOT") %>%
+  aov(value ~ DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data1, COND== "ESCENAS", TIPO== "TOT") %>%
+  aov(value ~ DECADA, data=.)%>%
+  summary()
+
+filter(data1, COND== "ESCENAS", TIPO== "TOT") %>%
+  aov(value ~ DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data1, COND== "ROSTROS", TIPO== "Z") %>%
+  aov(value ~ DECADA, data=.)%>%
+  summary()
+
+filter(data1, COND== "ROSTROS", TIPO== "Z") %>%
+  aov(value ~ DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+filter(data1, COND== "ESCENAS", TIPO== "Z") %>%
+  aov(value ~ DECADA, data=.)%>%
+  summary()
+
+filter(data1, COND== "ESCENAS", TIPO== "Z") %>%
+  aov(value ~ DECADA, data=.)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
 filter(data1, TIPO== "Z") %>%
   aov(value ~ COND*DECADA, data=.)%>%
   summary()
 
-filter(data1, DPRIMA== "DPR", !VAL=="TOT") %>%
+filter(data1, TIPO== "Z") %>%
   aov(value~COND*DECADA, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
@@ -62,16 +100,22 @@ data1 <- read_xlsx("Junto.xlsx",sheet = "D_PRIMA")%>%
                                  "CRI_Total","CRI_Total_CAT","IDARE_R_PUNTAJE", "IDARE_R_CAT",  
                                  "IDARE_E_PUNTAJE", "IDARE_E_CAT", "IDERE_R_PUNTAJE",
                                  "IDERE_R_CAT", "IDERE_E_PUNTAJE", "IDERE_E_CAT",
-                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_2DA",
-                                 "OCUPACION","OCUPA_CAT","OCUPACION_CAT")) %>%
-  separate(tip_cond_val, c("DPRIMA","COND","VAL"),
+                                 "COVID_CAT", "SHIPLEY","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_CAT","SUEÑO_2DA",
+                                 "SUEÑO_2DA_CAT","OCUPACION","OCUPAC_CAT","OCUPA_CAT")) %>%
+  separate(tip_cond_val, c("DPRIMA","COND","VAL","TIPO"),
            sep = "_")
 
-filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
+data1$DECADA <- as.factor(data1$DECADA)
+data1$DPRIMA <- as.factor(data1$DPRIMA)
+data1$COND <- as.factor(data1$COND)
+data1$VAL <- as.factor(data1$VAL)
+data1$TIPO <- as.factor(data1$TIPO)
+
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT", !TIPO=="Z") %>%
   aov(value ~ DECADA*COND*VAL, data=.)%>%
   summary()
 
-filter(data1, DPRIMA== "EIDP", !VAL=="TOT") %>%
+filter(data1, DPRIMA== "EIDP", !VAL=="TOT", !TIPO=="Z") %>%
   aov(value~ DECADA*COND*VAL, data=.)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
@@ -349,20 +393,13 @@ filter(data, TIPO=="ESCENAS")%>%
   summary()
 
 filter(data, TIPO=="ROSTROS")%>%
-  lm(formula= value ~ AMP_ROS*COVID_CAT, data =.)%>%
-  summary()
-
-filter(data, TIPO=="ESCENAS")%>%
-  lm(formula= value ~ SUP_ROS*COVID_CAT, data =.)%>%
+  lm(formula= value ~ AMP_ROS*SHIPLEY, data =.)%>%
   summary()
 
 filter(data, TIPO=="ESCENAS")%>%
   lm(formula= value ~ SUP_ROS*SHIPLEY, data =.)%>%
   summary()
 
-filter(data, TIPO=="ROSTROS")%>%
-  lm(formula= value ~ AMP_ROS*SHIPLEY, data =.)%>%
-  summary()
 
 #### MODELOS WM, ATT CON EDAD ####
 
@@ -380,8 +417,8 @@ lm(formula= AMP_ROS ~ ESCOLARIDAD*EDAD, data = data)%>%
 lm(formula= SUP_ROS ~ ESCOLARIDAD*EDAD, data = data)%>%
   summary()
 
-filter(data2, COND=="ROSTROS", !CRI_Total_CAT=="MEDIO")%>%
-  lm(formula= value ~ AMP_ROS*CRI_Total, data =.)%>%
+filter(data, TIPO=="ROSTROS")%>%
+  lm(formula= value ~ CRI_Total*EDAD, data =.)%>%
   summary()
 
 filter(data, TIPO=="ESCENAS")%>%
@@ -531,21 +568,34 @@ lm(formula= SUP_ROS ~ SHIPLEY*EDAD, data = data)%>%
 #### ANALISIS CON GRUPOS ####
 data2 <- read_xlsx("Junto.xlsx",sheet = "Regresiones")%>%
   gather(var_cond_tipo, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT","MoCA","MoCA_Z",
-                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT","CRI_Total","CRI_Total_Z","CRI_Total_CAT",
-                                  "IDARE_R_PUNTAJE","IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE",
-                                  "IDERE_R_Z","IDERE_R_CAT","IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY","SHIPLEY_Z",
-                                  "SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
-                                  "OCUPACION","OCUPA_CAT","OCUPA_Z","OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
+                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT",
+                                  "CRI_Total","CRI_Total_Z","CRI_Total_CAT","IDARE_R_PUNTAJE",
+                                  "IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z",
+                                  "IDARE_E_CAT","IDERE_R_PUNTAJE","IDERE_R_Z","IDERE_R_CAT",
+                                  "IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT",
+                                  "SHIPLEY","SHIPLEY_Z","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z",
+                                  "SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
+                                  "OCUPACION","OCUPAC_CAT","OCUPA_Z","OCUPA_CAT","AMP_ROS",
+                                  "AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
   separate(var_cond_tipo, c("VAR","COND","TIPO"), sep = "_")
+
+data2$DECADA <- as.factor(data2$DECADA)
+data2$VAR <- as.factor(data2$VAR)
+data2$COND <- as.factor(data2$COND)
+data2$TIPO <- as.factor(data2$TIPO)
 
 data3 <- read_xlsx("Junto.xlsx",sheet = "Multiplicacion")%>%
   gather(var_cond_tipo, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT","MoCA","MoCA_Z",
-                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT","CRI_Total","CRI_Total_Z","CRI_Total_CAT",
-                                  "IDARE_R_PUNTAJE","IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE",
-                                  "IDERE_R_Z","IDERE_R_CAT","IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY","SHIPLEY_Z",
-                                  "SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
-                                  "OCUPACION","OCUPA_CAT","OCUPA_Z","OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z", 
-                                  "CRIq_SUP","IDEREE_AGE","SHIPLEY_AGE","CRIq_AGE","SUEÑOSES_AGE")) %>%
+                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT",
+                                  "CRI_Total","CRI_Total_Z","CRI_Total_CAT","IDARE_R_PUNTAJE",
+                                  "IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z",
+                                  "IDARE_E_CAT","IDERE_R_PUNTAJE","IDERE_R_Z","IDERE_R_CAT",
+                                  "IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT",
+                                  "SHIPLEY","SHIPLEY_Z","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z",
+                                  "SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
+                                  "OCUPACION","OCUPAC_CAT","OCUPA_Z","OCUPA_CAT","AMP_ROS",
+                                  "AMP_ROS_Z","SUP_ROS","SUP_ROS_Z", 
+                                  "CRIq_SUP","IDEREE_AGE","SHIPLEY_AGE","CRIq_AGE","SUEÑOSES_AGE","SUEÑONOR_AGE")) %>%
   separate(var_cond_tipo, c("VAR","COND","TIPO"), sep = "_")
 
 ### ANALISIS DE VARIABLES CON ESCENAS/SUPRESION Y ROSTROS/AMPLIFICACION
@@ -553,38 +603,43 @@ data3 <- read_xlsx("Junto.xlsx",sheet = "Multiplicacion")%>%
 ### AMPLIFICACION - ROSTROS 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !EDAD_CAT=="MEDIO") %$%
   wilcox.test(value ~ EDAD_CAT, data =.)
-# U= 1469, p=8.9x10-6
+# U= 2107, p=9.336e-07
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
-# U= 4298, p=0.01278
+# U= 4151, p=0.01913
+
+filter(data2, COND== "ROSTROS", TIPO== "Z", !OCUPA_CAT=="MEDIO") %$%
+  wilcox.test(value ~ OCUPA_CAT, data =.)
+# U= 1849, p=0.06951
 
 
 ### SUPRESION - ESCENAS 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %$%
   wilcox.test(value ~ EDAD_CAT, data =.)
-# U= 1464, p=1.102e-05
+# U= 2064, p=1.102e-05
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
   wilcox.test(value ~ CRI_Total_CAT, data =.)
-# U= 756, p=0.02434
+# U= 1819, p=0.02434
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
-# U= 4144, p=0.00443
+# U= 3982, p=0.00443
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
   aov(value ~ SUP_ROS*CRI_Total_CAT, data =.)%>%
   summary()
-# F= 8.854 , p=0.00412 
+# F= 8.606, p=0.00415 
 
-filter(data2, COND== "ESCENAS", TIPO== "Z", CRI_Total_CAT=="BAJO") %$%
+filter(data2, COND== "ESCENAS", TIPO== "Z", CRI_Total_CAT=="LOW") %$%
   lm(formula= value ~ SUP_ROS, data =.)%>%
   summary()
-filter(data2, COND== "ESCENAS", TIPO== "Z", CRI_Total_CAT=="ALTO") %$%
+# R=0.07279, B= -0.0007933, p=0.0273 
+filter(data2, COND== "ESCENAS", TIPO== "Z", CRI_Total_CAT=="HIGH") %$%
   lm(formula= value ~ SUP_ROS, data =.)%>%
   summary()
-  
+# R=0.0455, B= 0.0005078, p=0.0719
 
 
 ### ANALISIS DE VARIABLES CON EDAD
@@ -592,102 +647,93 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", CRI_Total_CAT=="ALTO") %$%
 ### ROSTROS
 filter(data2, COND== "ROSTROS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
   wilcox.test(value ~ CRI_Total_CAT, data =.)
-# U= 749, p=0.03053
+# U= 1669, p=0.06163
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
-# U= 4298, p=0.01278
+# U= 4151, p=0.01278
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !SUEÑO_NOR_CAT=="MEDIO") %$%
   aov(value ~ EDAD_Z*SUEÑO_NOR_CAT, data =.)%>%
   summary()
-# F= 2.748 , p=0.09914 
+# F= 0.483 , p=0.488 
 
 ### ESCENAS
 filter(data2, COND== "ESCENAS", TIPO== "Z", !IDARE_E_CAT=="MEDIO") %$%
   wilcox.test(value ~ IDARE_E_CAT, data =.)
-# U= 1590, p=0.04019
+# U= 1541, p=0.05724
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   wilcox.test(value ~ MoCA_CAT, data =.)
-# U= 4144, p=0.00443
+# U= 3982, p=0.006003
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO") %$%
   aov(value ~ EDAD_Z*IDERE_E_CAT, data =.)%>%
   summary()
-# F= 8.181, p=0.005043  
+# F= 8.475, p=0.00426  
 
-filter(data2, COND== "ESCENAS", TIPO== "Z", IDERE_E_CAT=="ALTO") %$%
+filter(data2, COND== "ESCENAS", TIPO== "Z", IDERE_E_CAT=="HIGH") %$%
   lm(formula= value ~ EDAD_Z, data =.)%>%
   summary()
-filter(data2, COND== "ESCENAS", TIPO== "Z", IDERE_E_CAT=="BAJO") %$%
-  lm(formula= value ~ EDAD_Z, data =.)%>%
-  summary()
+# R=0.3538, B= 0.74533, p=1.64e-07 
 
-filter(data2, COND== "ESCENAS", TIPO== "Z", !SHIPLEY_CAT=="MEDIO") %$%
-  aov(value ~ EDAD_Z*SHIPLEY_CAT, data =.)%>%
+filter(data2, COND== "ESCENAS", TIPO== "Z", IDERE_E_CAT=="LOW") %$%
+  lm(formula= value ~ EDAD_Z, data =.)%>%
   summary()
-# F= 4.010, p=0.0487  
+# R=0.1192 , B= 0.29350, p=0.00264
 
-filter(data2, COND== "ESCENAS", TIPO== "Z", SHIPLEY_CAT=="ALTO") %$%
-  lm(formula= value ~ EDAD_Z, data =.)%>%
-  summary()
-filter(data2, COND== "ESCENAS", TIPO== "Z", SHIPLEY_CAT=="BAJO") %$%
-  lm(formula= value ~ EDAD_Z, data =.)%>%
-  summary()
 
 ### AMPLIFICACION
 filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %$%
   wilcox.test(AMP_ROS_Z ~ ESCOLARIDAD_CAT, data =.)
-# U= 12536, p=1.805e-05
+# U= 42256, p=4.663e-06
 
 filter(data2, !CRI_Total_CAT=="MEDIO") %$%
   wilcox.test(AMP_ROS_Z ~ CRI_Total_CAT, data =.)
-# U= 10544, p=0.03429
+# U= 23680, p=0.1851
+
+filter(data2, !IDARE_E_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ IDARE_E_CAT, data =.)
+# U= 36512, p=0.0003077
+
+filter(data2, !IDERE_R_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ IDERE_R_CAT, data =.)
+# U= 46496, p=4.556e-10
+
+filter(data2, !OCUPA_CAT=="MEDIO") %$%
+  wilcox.test(AMP_ROS_Z ~ OCUPA_CAT, data =.)
+# U= 43088, p=0.0001428
 
 filter(data2, !CRI_Total_CAT=="MEDIO") %$%
   aov(AMP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)%>%
   summary()
-# F= 8.557, p=0.00374 
+# F= 14.021, p=0.000206 
 
-filter(data2, CRI_Total_CAT=="BAJO") %$%
+filter(data2, CRI_Total_CAT=="LOW") %$%
   lm(formula= AMP_ROS_Z ~ EDAD_Z, data =.)%>%
   summary()
-filter(data2, CRI_Total_CAT=="ALTO") %$%
+# R= -0.004673, B= -0.0005463, p=0.995
+
+filter(data2, CRI_Total_CAT=="HIGH") %$%
   lm(formula= AMP_ROS_Z ~ EDAD_Z, data =.)%>%
   summary()
-
+# R=0.09905, B= -0.47338, p=2.71e-06
 
 
 ### SUPRESION
 filter(data2, !CRI_Total_CAT=="MEDIO") %$%
   aov(SUP_ROS_Z ~ EDAD_Z*CRI_Total_CAT, data =.)%>%
   summary()
-# F= 28.383 , p=2.11e-07 
+# F= 31.892, p=3.02e-08 
 
-filter(data2, CRI_Total_CAT=="BAJO") %$%
+filter(data2, CRI_Total_CAT=="LOW") %$%
   lm(formula= SUP_ROS_Z ~ EDAD_Z, data =.)%>%
   summary()
-filter(data2, CRI_Total_CAT=="ALTO") %$%
+# R= 0.0882, B= -0.34704, p=5.35e-06
+filter(data2, CRI_Total_CAT=="HIGH") %$%
   lm(formula= SUP_ROS_Z ~ EDAD_Z, data =.)%>%
   summary()
-
-filter(data2, !MoCA_CAT=="MEDIO") %$%
-  aov(SUP_ROS_Z ~ EDAD_Z*MoCA_CAT, data =.)%>%
-  summary()
-# F= 16.727 , p=4.74e-05 
-
-filter(data2, !SUEÑO_2DA_CAT=="MEDIO") %$%
-  aov(SUP_ROS_Z ~ EDAD_Z*SUEÑO_2DA_CAT, data =.)%>%
-  summary()
-
-filter(data2, SUEÑO_2DA_CAT=="BAJO") %$%
-  lm(formula= SUP_ROS_Z ~ EDAD_Z, data =.)%>%
-  summary()
-filter(data2, SUEÑO_2DA_CAT=="ALTO") %$%
-  lm(formula= SUP_ROS_Z ~ EDAD_Z, data =.)%>%
-  summary()
-
+# R= 0.05386, B= 0.4154, p=0.000491
 
 
 #### DESCRIPTIVOS DE LA MUESTRA #####
@@ -730,48 +776,25 @@ aov(SUP_ROS ~ DECADA, data = data)%>%
   View()
 
 
-filter(data, TIPO=="ROSTROS") %$%
+filter(data1, COND== "ROSTROS", TIPO== "TOT") %$%
+  describeBy(value, DECADA)
+filter(data1, COND== "ROSTROS", TIPO== "Z") %$%
   describeBy(value, DECADA)
 
-filter(data, TIPO=="ESCENAS") %$%
+filter(data1, COND== "ESCENAS", TIPO== "TOT") %$%
+  describeBy(value, DECADA)
+filter(data1, COND== "ESCENAS", TIPO== "Z") %$%
   describeBy(value, DECADA)
 
-filter(data) %$%
+filter(data1) %$%
   describeBy(AMP_ROS, DECADA)
+filter(data1) %$%
+  describeBy(AMP_ROS_Z, DECADA)
 
-filter(data) %$%
+filter(data1) %$%
   describeBy(SUP_ROS, DECADA)
-
-
-anova_test(SUEÑO_NOR~DECADA, data=data)
-aov(SUEÑO_NOR~DECADA, data=data)%>%
-  tukey_hsd()%>%
-  filter(p.adj < 0.05)%>%
-  View()
-
-filter(data) %$%
-  describeBy(SUEÑO_NOR, DECADA)
-
-anova_test(SUEÑO_2DA~DECADA, data=data)
-aov(SUEÑO_2DA~DECADA, data=data)%>%
-  tukey_hsd()%>%
-  filter(p.adj < 0.05)%>%
-  View()
-
-filter(data) %$%
-  describeBy(SUEÑO_2DA, DECADA)
-
-filter(data, COND=="ROSTROS", TIPO=="TOT") %$%
-  describeBy(value, DECADA)
-
-filter(data, COND=="ESCENAS", TIPO=="TOT") %$%
-  describeBy(value, DECADA)
-
-filter(data) %$%
-  describeBy(AMP_ROS, DECADA)
-
-filter(data) %$%
-  describeBy(SUP_ROS, DECADA)
+filter(data1) %$%
+  describeBy(SUP_ROS_Z, DECADA)
 
 
 #### RESULTADOS MEDIAS POR GRUPOS ####
@@ -779,68 +802,78 @@ filter(data) %$%
 ### AMPLIFICACION - ROSTROS
 filter(data2, COND== "ROSTROS", TIPO== "Z", !EDAD_CAT=="MEDIO") %$%
   describeBy(value, EDAD_CAT)
-#Alto: 0.59 (SD=1.01)
-#Bajo: -0.23 (SD=1.22)
+#Alto: 0.62 (SD=1.15)
+#Bajo: -0.41 (SD=0.87)
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   describeBy(value, MoCA_CAT)
-#Alto: -0.2 (SD=0.72)
-#Bajo: 0.17 (SD=1.17)
+#Alto: -0.2 (SD=0.8)
+#Bajo: 0.17 (SD=1.12)
+
+filter(data2, COND== "ROSTROS", TIPO== "Z", !OCUPA_CAT=="MEDIO") %$%
+  describeBy(value, OCUPA_CAT)
+#Alto: -0.6 (SD=0.85)
+#Bajo: 0.3 (SD=1.13)
+
+
 
 ### SUPRESION - ESCENAS 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %$%
   describeBy(value, EDAD_CAT)
-#Alto: 0.48 (SD=1.01)
-#Bajo: -0.24 (SD=1.37)
+#Alto: 0.46 (SD=1.07)
+#Bajo: -0.41 (SD=1.05)
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
   describeBy(value, CRI_Total_CAT)
-#Alto: 0.26 (SD=0.91)
-#Bajo: -0.18 (SD=1.1)
-
-filter(data3, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
-  describeBy(CRIq_SUP, CRI_Total_CAT)
-#Alto: 0.14 (SD=1.95)
-#Bajo: -0.27 (SD=1.32)
+#Alto: 0.23 (SD=0.92)
+#Bajo: -0.24 (SD=0.98)
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   describeBy(value, MoCA_CAT)
-#Alto: -0.25 (SD=0.75)
-#Bajo: 0.21 (SD=1.13)
+#Alto: -0.24 (SD=0.84)
+#Bajo: 0.21 (SD=1.08)
+
+filter(data3, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
+  describeBy(CRIq_SUP, CRI_Total_CAT)
+#Alto: 0.01 (SD=1.76)
+#Bajo: -0.08 (SD=1.11)
 
 
-### ROSTROS Y EDAD
+### ROSTROS Y EDAD      
 filter(data2, COND== "ROSTROS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %$%
   describeBy(value, CRI_Total_CAT)
-#Alto: 0.17 (SD=0.8)
-#Bajo: -0.08 (SD=1.43)
+#Alto: 0.12 (SD=0.86)
+#Bajo: -0.2 (SD=0.93)
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   describeBy(value, MoCA_CAT)
-#Alto: -0.2 (SD=0.72)
-#Bajo: 0.17 (SD=1.17)
+#Alto: -0.2 (SD=0.8)
+#Bajo: 0.17 (SD=1.12)
+
+filter(data3, COND== "ROSTROS", TIPO== "Z", !SUEÑO_NOR_CAT=="MEDIO") %$%
+  describeBy(SUEÑONOR_AGE, SUEÑO_NOR_CAT)
+#Alto: -0.06 (SD=0.88)
+#Bajo: -0.01 (SD=1.3)
+
 
 
 ### ESCENAS Y EDAD
 filter(data2, COND== "ESCENAS", TIPO== "Z", !IDARE_E_CAT=="MEDIO") %$%
   describeBy(value, IDARE_E_CAT)
-#Alto: -0.22 (SD=0.88)
-#Bajo: 0.11 (SD=0.91)
+#Alto: -0.2 (SD=0.99)
+#Bajo: 0.15 (SD=1.04)
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %$%
   describeBy(value, MoCA_CAT)
-#Alto: -0.25 (SD=0.75)
-#Bajo: 0.21 (SD=1.13)
+#Alto: -0.24 (SD=0.84)
+#Bajo: 0.21 (SD=1.08)
 
 filter(data3, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO") %$%
   describeBy(IDEREE_AGE, IDERE_E_CAT)
-#Alto: -0.19 (SD=1.24)
-#Bajo: -0.27 (SD=1.5)
+#Alto: -0.2 (SD=1.25)
+#Bajo: -0.25 (SD=1.32)
 
-filter(data3, COND== "ESCENAS", TIPO== "Z", !SHIPLEY_CAT=="MEDIO") %$%
-  describeBy(SHIPLEY_AGE, SHIPLEY_CAT)
-#Alto: 0.04 (SD=1.37)
-#Bajo: 0.18 (SD=1.99)
+
 
 ### AMPLIFICACION Y EDAD
 filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %$%
@@ -853,24 +886,33 @@ filter(data2, !CRI_Total_CAT=="MEDIO") %$%
 #Alto: 0.14 (SD=0.96)
 #Bajo: -0.22 (SD=0.93)
 
+filter(data2, !IDARE_E_CAT=="MEDIO") %$%
+  describeBy(AMP_ROS_Z, IDARE_E_CAT)
+#Alto: 0.05 (SD=0.99)
+#Bajo: -0.24 (SD=1.01)
+
+filter(data2, !IDERE_R_CAT=="MEDIO") %$%
+  describeBy(AMP_ROS_Z, IDERE_R_CAT)
+#Alto: 0.26 (SD=0.93)
+#Bajo: -0.31 (SD=1)
+
+filter(data2, !OCUPA_CAT=="MEDIO") %$%
+  describeBy(AMP_ROS_Z, OCUPA_CAT)
+#Alto: 0.22 (SD=1.04)
+#Bajo: -0.18 (SD=0.92)
+
 filter(data3, !CRI_Total_CAT=="MEDIO") %$%
   describeBy(CRIq_AGE, CRI_Total_CAT)
-#Alto: 1.88 (SD=1.19)
-#Bajo: 1.2 (SD=0.89)
+#Alto: 1.45 (SD=1.25)
+#Bajo: 0.88 (SD=0.89)
 
 
 
 ### SUPRESION Y EDAD
-
 filter(data3, !CRI_Total_CAT=="MEDIO") %$%
   describeBy(CRIq_AGE, CRI_Total_CAT)
-#Alto: 1.88 (SD=1.19)
-#Bajo: 1.2 (SD=0.89)
-
-filter(data3, !SUEÑO_2DA_CAT=="MEDIO") %$%
-  describeBy(SUEÑOSES_AGE, SUEÑO_2DA_CAT)
-#Alto: -0.01 (SD=1.31)
-#Bajo: -0.38 (SD=1.29)
+#Alto: 1.45 (SD=1.25)
+#Bajo: 0.88 (SD=0.89)
 
 
 

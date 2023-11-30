@@ -25,39 +25,49 @@ data3$CRI_Total <- as.numeric(data3$CRI_Total)
 
 
 anova_test(SHIPLEY~DECADA, data=data3)
+
 anova_test(CRI_Total~DECADA, data=data3)
 aov(CRI_Total~DECADA, data=data3)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
+
 anova_test(ESCOLARIDAD~DECADA, data=data3)
 aov(ESCOLARIDAD~DECADA, data=data3)%>%
   tukey_hsd()%>%
   filter(p.adj < 0.05)%>%
   View()
+
 anova_test(EDAD~DECADA, data=data3)
 
+anova_test(SUEÑO_NOR~DECADA, data=data3)
+aov(SUEÑO_NOR~DECADA, data=data3)%>%
+  tukey_hsd()%>%
+  filter(p.adj < 0.05)%>%
+  View()
+
+anova_test(SUEÑO_2DA~DECADA, data=data3)
+	
 kruskal_test(EDAD~CRI_Total_CAT, data=data3)
 kruskalmc(EDAD~CRI_Total_CAT, data=data3)
 
 
 kruskal_test(OCUPA_CAT~DECADA, data=data3)
 kruskalmc(OCUPA_CAT~DECADA, data=data3)
+
 kruskal_test(MoCA~DECADA, data=data3)
 kruskalmc(MoCA~DECADA, data=data3)
+
 kruskal_test(IDARE_R_PUNTAJE~DECADA, data=data3)
 kruskalmc(IDARE_R_PUNTAJE~DECADA, data=data3)
+
+kruskal_test(IDARE_E_PUNTAJE~DECADA, data=data3)
+
 kruskal_test(IDERE_R_PUNTAJE~DECADA, data=data3)
 kruskalmc(IDERE_R_PUNTAJE~DECADA, data=data3)
-kruskal_test(IDARE_E_PUNTAJE~DECADA, data=data3)
+
 kruskal_test(IDERE_E_PUNTAJE~DECADA, data=data3)
 kruskalmc(IDERE_E_PUNTAJE~DECADA, data=data3)
-kruskal_test(IDARE_R_NIVEL~DECADA, data=data3)
-kruskal_test(IDERE_R_NIVEL~DECADA, data=data3)
-kruskalmc(IDERE_R_NIVEL~DECADA, data=data3)
-kruskal_test(IDARE_E_NIVEL~DECADA, data=data3)
-kruskal_test(IDERE_E_NIVEL~DECADA, data=data3)
-kruskalmc(IDERE_E_NIVEL~DECADA, data=data3)
 
 
 decadas<-c("20","30","40","50","60")
@@ -65,64 +75,57 @@ decadas<-c("20","30","40","50","60")
 
 for (i in decadas) {
   bases<- filter(data3,DECADA== i)
-  print(i) 
-  std.error(bases$SHIPLEY)  %>%
-  print()
-  std.error(bases$ESCOLARIDAD)  %>%
-  print()
-  std.error(bases$CRI_Total)  %>%
-  print()
-  range(bases$MoCA) %>%
-  print()
+  print(i)
   std.error(bases$EDAD) %>%
-  print()
-  range(bases$IDARE_R_PUNTAJE, na.rm = T) %>%
-  print()
-  range(bases$IDERE_R_PUNTAJE, na.rm = T) %>%
-  print()
-  range(bases$IDARE_E_PUNTAJE, na.rm = T) %>%
-  print()
+    print()
+  std.error(bases$ESCOLARIDAD)  %>%
+    print()
+  range(bases$MoCA) %>%
+    print()
+  std.error(bases$SHIPLEY)  %>%
+    print()
+  std.error(bases$CRI_Total)  %>%
+   print()
   range(bases$IDERE_E_PUNTAJE, na.rm = T) %>%
-  print()
-  range(bases$IDARE_R_NIVEL, na.rm = T) %>%
-  print()
-  range(bases$IDERE_R_NIVEL, na.rm = T) %>%
-  print()
-  range(bases$IDARE_E_NIVEL, na.rm = T) %>%
-  print()
-  range(bases$IDERE_E_NIVEL, na.rm = T) %>%
-  print()
+    print()
+  range(bases$IDERE_R_PUNTAJE, na.rm = T) %>%
+    print()
+  range(bases$IDARE_E_PUNTAJE, na.rm = T) %>%
+    print()
+  range(bases$IDARE_R_PUNTAJE, na.rm = T) %>%
+    print()
+  std.error(bases$SUEÑO_NOR) %>%
+    print()
+  std.error(bases$SUEÑO_2DA) %>%
+    print()
  #print(bases) 
   }
  
 for (i in decadas) {
   bases<- filter(data3,DECADA== i)
-  print(i) 
-  mean(bases$SHIPLEY)  %>%
+  print(i)
+  
+  mean(bases$EDAD) %>%
     print()
   mean(bases$ESCOLARIDAD)  %>%
     print()
-  mean(bases$CRI_Total)  %>%
-    print()
   median(bases$MoCA) %>%
     print()
-  mean(bases$EDAD) %>%
+  mean(bases$SHIPLEY)  %>%
     print()
-  median(bases$IDARE_R_PUNTAJE, na.rm = T) %>%
+  mean(bases$CRI_Total)  %>%
+    print()
+  median(bases$IDERE_E_PUNTAJE, na.rm = T) %>%
     print()
   median(bases$IDERE_R_PUNTAJE, na.rm = T) %>%
     print()
   median(bases$IDARE_E_PUNTAJE, na.rm = T) %>%
     print()
-  median(bases$IDERE_E_PUNTAJE, na.rm = T) %>%
+  median(bases$IDARE_R_PUNTAJE, na.rm = T) %>%
     print()
-  median(bases$IDARE_R_NIVEL, na.rm = T) %>%
+  mean(bases$SUEÑO_NOR) %>%
     print()
-  median(bases$IDERE_R_NIVEL, na.rm = T) %>%
-    print()
-  median(bases$IDARE_E_NIVEL, na.rm = T) %>%
-    print()
-  median(bases$IDERE_E_NIVEL, na.rm = T) %>%
+  mean(bases$SUEÑO_2DA) %>%
     print()
   #print(bases) 
 }

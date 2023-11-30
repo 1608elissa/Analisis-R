@@ -15,14 +15,13 @@ data <- read_xlsx("Junto.xlsx",sheet = "PuntajeZ")%>%
                                      "IDERE_E_PUNTAJE","COVID_CAT", "SHIPLEY",
                                      "SUEÑO_NOR","SUEÑO_2DA","OCUPA_CAT",
                                      "AMP_ROS","SUP_ROS")) %>%
-  separate(cond_tip_est_val, c("COND","VD","TIPO", "VAL"), sep = "_")
-
+  separate(cond_tip_est_val, c("VAR","TIPO", "Z"), sep = "_")
 
 ggplot(data = data, aes(x = EDAD, y = AMP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
   labs(x = "AGE", y = "ENHANCEMENT INDEX") +  
   theme_classic()+ 
-  theme(text = element_text(size=15)) + 
+  theme(text = element_text(size=17)) + 
   scale_y_continuous(breaks = seq(-2.5, 2.5))
 
 ggplot(data = data, aes(x = EDAD, y = SUP_ROS)) +
@@ -38,8 +37,7 @@ filter(data, TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
   labs(x = "AGE", y = "WME/AF") +  
   theme_classic()+ 
-  theme(text = element_text(size=15)) + 
-  scale_y_continuous(breaks = seq(-2, 5))
+  theme(text = element_text(size=17))
 
 filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = EDAD, y = value)) +
@@ -47,8 +45,7 @@ filter(data, TIPO=="ESCENAS")%>%
   geom_smooth(method = "lm", color = "#9F79EE", lwd = 1.5) +
   labs(x = "AGE", y = "WME/IF") +  
   theme_classic()+ 
-  theme(text = element_text(size=15)) + 
-  scale_y_continuous(breaks = seq(-2, 5))
+  theme(text = element_text(size=17))
 
 
 filter(data, TIPO=="ROSTROS")%>%
@@ -57,9 +54,8 @@ filter(data, TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", color = "#CD5555", lwd = 1.5) +
   labs(x = "WME/IF", y = "ENHANCEMENT INDEX") +  
   theme_classic()+ 
-  theme(text = element_text(size=15))+ 
-  scale_y_continuous(breaks = seq(-2.5, 2.5)) +
-  scale_x_continuous(breaks = seq(-2, 5))
+  theme(text = element_text(size=17)) + 
+  scale_y_continuous(breaks = seq(-2, 2))
 
 filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = value, y = SUP_ROS)) +
@@ -67,9 +63,8 @@ filter(data, TIPO=="ESCENAS")%>%
   geom_smooth(method = "lm", color = "#CD5555", lwd = 1.5) +
   labs(x = "WME/IF", y = "SUPPRESSION INDEX") +  
   theme_classic()+ 
-  theme(text = element_text(size=15)) +
-  scale_y_continuous(breaks = seq(-2.5, 2.5)) +
-  scale_x_continuous(breaks = seq(-2, 5))
+  theme(text = element_text(size=17)) + 
+  scale_y_continuous(breaks = seq(-2, 2))
 
 
 
@@ -77,21 +72,15 @@ filter(data, TIPO=="ESCENAS")%>%
 
 data2 <- read_xlsx("Junto.xlsx",sheet = "Regresiones")%>%
   gather(var_cond_tipo, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT","MoCA","MoCA_Z",
-                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT","CRI_Total","CRI_Total_Z","CRI_Total_CAT",
-                                  "IDARE_R_PUNTAJE","IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE",
-                                  "IDERE_R_Z","IDERE_R_CAT","IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY","SHIPLEY_Z",
-                                  "SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
-                                  "OCUPACION","OCUPA_CAT","OCUPA_Z","OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
-  separate(var_cond_tipo, c("VAR","COND","TIPO"), sep = "_")
-
-data3 <- read_xlsx("Junto.xlsx",sheet = "Multiplicacion")%>%
-  gather(var_cond_tipo, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT","MoCA","MoCA_Z",
-                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT","CRI_Total","CRI_Total_Z","CRI_Total_CAT",
-                                  "IDARE_R_PUNTAJE","IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z","IDARE_E_CAT","IDERE_R_PUNTAJE",
-                                  "IDERE_R_Z","IDERE_R_CAT","IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT","SHIPLEY","SHIPLEY_Z",
-                                  "SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z","SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
-                                  "OCUPACION","OCUPA_CAT","OCUPA_Z","OCUPACION_CAT","AMP_ROS","AMP_ROS_Z","SUP_ROS","SUP_ROS_Z", 
-                                  "CRIq_SUP","IDEREE_AGE","SHIPLEY_AGE","CRIq_AGE","SUEÑOSES_AGE")) %>%
+                                  "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT",
+                                  "CRI_Total","CRI_Total_Z","CRI_Total_CAT","IDARE_R_PUNTAJE",
+                                  "IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z",
+                                  "IDARE_E_CAT","IDERE_R_PUNTAJE","IDERE_R_Z","IDERE_R_CAT",
+                                  "IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT",
+                                  "SHIPLEY","SHIPLEY_Z","SHIPLEY_CAT","SUEÑO_NOR","SUEÑO_NOR_Z",
+                                  "SUEÑO_NOR_CAT","SUEÑO_2DA","SUEÑO_2DA_Z","SUEÑO_2DA_CAT",	
+                                  "OCUPACION","OCUPAC_CAT","OCUPA_Z","OCUPA_CAT","AMP_ROS",
+                                  "AMP_ROS_Z","SUP_ROS","SUP_ROS_Z")) %>%
   separate(var_cond_tipo, c("VAR","COND","TIPO"), sep = "_")
 
 ### AMPLIFICACION - ROSTROS 
@@ -102,7 +91,7 @@ filter(data, TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", color = "#8B636C", lwd = 1.5) +
   labs(x = "AGE", y = "WME/AF") +  
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = MoCA, y = value)) +
@@ -110,7 +99,15 @@ filter(data, TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
   labs(x = "CogFun", y = "WME/AF") +  
   theme_classic()+ 
-  theme(text = element_text(size = 15)) 
+  theme(text = element_text(size = 17))
+
+filter(data, TIPO=="ROSTROS")%>%
+  ggplot(aes(x = OCUPA_CAT, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "#8B6969", lwd = 1.5) +
+  labs(x = "Occup", y = "WME/AF") +  
+  theme_classic()+ 
+  theme(text = element_text(size = 17)) 
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=EDAD_CAT, fill=EDAD_CAT)) + 
@@ -120,7 +117,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   labs(x = "Age Group", y = "WME/AF") +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=MoCA_CAT, fill=MoCA_CAT)) + 
@@ -131,7 +128,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 
 ### SUPRESION - ESCENAS 
@@ -143,7 +140,7 @@ filter(data, TIPO=="ESCENAS")%>%
   labs(x = "Age", y = "WME/IF") +  
   ylim (-1, 3) +
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = CRI_Total, y = value)) +
@@ -152,7 +149,7 @@ filter(data, TIPO=="ESCENAS")%>%
   labs(x = "CogRes", y = "WME/IF") +  
   xlim (-1,2) + ylim (-1, 3) +
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = MoCA, y = value)) +
@@ -161,7 +158,7 @@ filter(data, TIPO=="ESCENAS")%>%
   labs(x = "CogFun", y = "WME/IF") +  
   ylim (-1, 3) +
   theme_classic()+ 
-  theme(text = element_text(size = 15)) 
+  theme(text = element_text(size = 17)) 
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO")%>%
   ggplot(aes(x = SUP_ROS_Z, y = value, colour= CRI_Total_CAT)) +
@@ -170,7 +167,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO")%>%
   labs(x = "SUPPRESSION INDEX", y = "WME/IF", color = "CRI_Total_CAT") +
   ylim (-1, 3) +
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=EDAD_CAT, fill=EDAD_CAT)) + 
@@ -181,7 +178,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=CRI_Total_CAT, fill=CRI_Total_CAT)) + 
@@ -192,7 +189,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=MoCA_CAT, fill=MoCA_CAT)) + 
@@ -203,7 +200,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 
 
@@ -215,7 +212,7 @@ filter(data, TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", color = "#8B5A00", lwd = 1.5) +
   labs(x = "CogRes", y = "WME/AF") +  
   theme_classic()+ 
-  theme(text = element_text(size = 15)) 
+  theme(text = element_text(size = 17)) 
 
 filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = MoCA, y = value)) +
@@ -223,17 +220,15 @@ filter(data, TIPO=="ROSTROS")%>%
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
   labs(x = "CogFun", y = "WME/AF") +  
   theme_classic()+ 
-  theme(text = element_text(size = 15)) 
+  theme(text = element_text(size = 17))
 
-filter(data2, COND== "ROSTROS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
-  ggplot(aes(y=value, x=CRI_Total_CAT, fill=CRI_Total_CAT)) + 
-  scale_fill_brewer(palette="RdPu") +
-  geom_boxplot() +
-  geom_jitter(size=.2) +
-  labs(x = "CogRes Group", y = "WME/AF") +
+filter(data2, COND== "ROSTROS", TIPO== "Z", !SUEÑO_NOR_CAT=="MEDIO")%>%
+  ggplot(aes(x = EDAD_Z, y = value, colour= SUEÑO_NOR_CAT)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Age", y = "WME/AF", color = "SUEÑO_NOR_CAT") +
   theme_classic()+ 
-  theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=MoCA_CAT, fill=MoCA_CAT)) + 
@@ -243,7 +238,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   labs(x = "CogFun Group", y = "WME/AF") +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 
 
@@ -255,7 +250,7 @@ filter(data, TIPO=="ESCENAS")%>%
   geom_smooth(method = "lm", color = "#008B8B", lwd = 1.5) +
   labs(x = "SAnx", y = "WME/IF") +  
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data, TIPO=="ESCENAS")%>%
   ggplot(aes(x = MoCA, y = value)) +
@@ -263,7 +258,7 @@ filter(data, TIPO=="ESCENAS")%>%
   geom_smooth(method = "lm", color = "#8B668B", lwd = 1.5) +
   labs(x = "CogFun", y = "WME/IF") +  
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = value, colour= IDERE_E_CAT)) +
@@ -271,25 +266,8 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO")%>%
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Age", y = "WME/IF", color = "IDERE_E_CAT") +
   theme_classic()+ 
-  theme(text = element_text(size = 15))
-
-filter(data2, COND== "ESCENAS", TIPO== "Z", !SHIPLEY_CAT=="MEDIO")%>%
-  ggplot(aes(x = EDAD_Z, y = value, colour= SHIPLEY_CAT)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "Age", y = "WME/IF", color = "SHIPLEY_CAT") +
-  theme_classic()+ 
-  theme(text = element_text(size = 15))
-
-filter(data2, COND== "ESCENAS", TIPO== "Z", !IDARE_E_CAT=="MEDIO") %>%
-  ggplot(aes(y=value, x=IDARE_E_CAT, fill=IDARE_E_CAT)) + 
-  scale_fill_brewer(palette="Greens") +
-  geom_boxplot() +
-  geom_jitter(size=.2) +
-  labs(x = "SAnx Group", y = "WME/IF") +
-  theme_classic()+ 
-  theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  ylim (-2, 3) +
+  theme(text = element_text(size = 17))
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=MoCA_CAT, fill=MoCA_CAT)) + 
@@ -297,11 +275,19 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   geom_boxplot() +
   geom_jitter(size=.2) +
   labs(x = "CogFun Group", y = "WME/IF") +
-  ylim (-1, 3) +
   theme_classic()+ 
   theme(legend.position = "none") +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
+filter(data2, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO") %>%
+  ggplot(aes(y=value, x=IDERE_E_CAT, fill=IDERE_E_CAT)) + 
+  scale_fill_brewer(palette="YlGn") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "SAnx Group", y = "WME/IF") +
+  theme_classic()+ 
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
 
 
 ### AMPLIFIFCACION
@@ -310,13 +296,32 @@ ggplot(data = data, aes(x = ESCOLARIDAD, y = AMP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#5F9EA0", lwd = 1.5) +
   labs(x = "YS", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
 ggplot(data = data, aes(x = CRI_Total, y = AMP_ROS)) +
   geom_point() + geom_smooth(method = "lm", color = "#8B5A00", lwd = 1.5) +
   labs(x = "CogRes", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
+
+ggplot(data = data, aes(x = IDARE_E_PUNTAJE, y = AMP_ROS)) +
+  geom_point() + geom_smooth(method = "lm", color = "#509FC7", lwd = 1.5) +
+  labs(x = "SAnx", y = "ENHANCEMENT INDEX") +  
+  theme_classic() +
+  theme(text = element_text(size = 17))
+
+ggplot(data = data, aes(x = IDERE_R_PUNTAJE, y = AMP_ROS)) +
+  geom_point() + geom_smooth(method = "lm", color = "#4A708B", lwd = 1.5) +
+  labs(x = "TDep", y = "ENHANCEMENT INDEX") +  
+  theme_classic() +
+  theme(text = element_text(size = 17))
+
+ggplot(data = data, aes(x = OCUPA_CAT, y = AMP_ROS)) +
+  geom_point() + geom_smooth(method = "lm", color = "#8B6969", lwd = 1.5) +
+  labs(x = "Occup", y = "ENHANCEMENT INDEX") +  
+  theme_classic() +
+  theme(text = element_text(size = 17))
+
 
 filter(data2, !CRI_Total_CAT=="MEDIO")%>%
   ggplot(aes(x = EDAD_Z, y = AMP_ROS_Z, colour= CRI_Total_CAT)) +
@@ -324,7 +329,8 @@ filter(data2, !CRI_Total_CAT=="MEDIO")%>%
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Age", y = "ENHANCEMENT INDEX", color = "CRI_CAT") +
   theme_classic()+ 
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
+
 
 filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %>%
   ggplot(aes(y=AMP_ROS_Z, x=ESCOLARIDAD_CAT, fill=ESCOLARIDAD_CAT)) +
@@ -335,20 +341,39 @@ filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %>%
   theme_classic()+ 
   theme(legend.position = "none") +
   ylim (-2, 2) +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
-filter(data2, !CRI_Total_CAT=="MEDIO") %>%
-  ggplot(aes(y=AMP_ROS_Z, x=CRI_Total_CAT, fill=CRI_Total_CAT)) +
-  scale_fill_brewer(palette="RdPu") +
+filter(data2, !IDARE_E_CAT=="MEDIO") %>%
+  ggplot(aes(y=AMP_ROS_Z, x=IDARE_E_CAT, fill=IDARE_E_CAT)) +
+  scale_fill_brewer(palette="BuGn") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "CogRes Group", y = "ENHANCEMENT INDEX", cex.lab = 60) +
+  labs(x = "SAnx Group", y = "ENHANCEMENT INDEX") +
+  theme_classic()+ 
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
+
+filter(data2, !IDERE_R_CAT=="MEDIO") %>%
+  ggplot(aes(y=AMP_ROS_Z, x=IDERE_R_CAT, fill=IDERE_R_CAT)) +
+  scale_fill_brewer(palette="Greens") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "TDep Group", y = "ENHANCEMENT INDEX") +
   theme_classic()+ 
   theme(legend.position = "none") +
   ylim (-2, 2) +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
-
+filter(data2, !OCUPA_CAT=="MEDIO") %>%
+  ggplot(aes(y=AMP_ROS_Z, x=OCUPA_CAT, fill=OCUPA_CAT)) +
+  scale_fill_brewer(palette="PuBuGn") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "Occup Group", y = "ENHANCEMENT INDEX") +
+  theme_classic()+ 
+  theme(legend.position = "none") +
+  ylim (-2, 2) +
+  theme(text = element_text(size = 17))
 
 
 ### SUPRESION
@@ -360,15 +385,8 @@ filter(data2, !CRI_Total_CAT=="MEDIO")%>%
   labs(x = "Age", y = "SUPPRESSION INDEX", color = "CRI_CAT") +
   theme_classic()+ 
   ylim (-2, 2) +
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 17))
 
-filter(data2, !SUEÑO_2DA_CAT=="MEDIO")%>%
-  ggplot(aes(x = EDAD_Z, y = SUP_ROS_Z, colour= SUEÑO_2DA_CAT)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "Age", y = "SUPPRESSION INDEX", color = "SLEEP-SES_CAT") +
-  theme_classic()+ 
-  theme(text = element_text(size = 15))
 
 
 
