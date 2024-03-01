@@ -3,8 +3,7 @@ library(rstatix)
 library(tidyverse)
 library(magrittr)
 library(gridExtra)
-library(psych)
-library(magrittr)
+
 
 
 ##### GRAFICAS ARTICULO BASICAS ####
@@ -52,7 +51,7 @@ filter(data, TIPO=="ROSTROS")%>%
   ggplot(aes(x = value, y = AMP_ROS)) +
   geom_point() +
   geom_smooth(method = "lm", color = "#CD5555", lwd = 1.5) +
-  labs(x = "WME/IF", y = "ENHANCEMENT INDEX") +  
+  labs(x = "WME/AF", y = "ENHANCEMENT INDEX") +  
   theme_classic()+ 
   theme(text = element_text(size=17)) + 
   scale_y_continuous(breaks = seq(-2, 2))
@@ -68,12 +67,12 @@ filter(data, TIPO=="ESCENAS")%>%
 
 
 
-#### GRAFICAS ARTICULO REGRESIONES MULTIPLES Y GRAFICAS DE VIOLIN ####
+#### GRAFICAS ARTICULO REGRESIONES MULTIPLES ####
 
 data2 <- read_xlsx("Junto.xlsx",sheet = "Regresiones")%>%
   gather(var_cond_tipo, value, -c("ID","DECADA","SEXO","EDAD","EDAD_Z","EDAD_CAT","MoCA","MoCA_Z",
                                   "MoCA_CAT","ESCOLARIDAD","ESCOLARIDAD_Z","ESCOLARIDAD_CAT",
-                                  "CRI_Total","CRI_Total_Z","CRI_Total_CAT","IDARE_R_PUNTAJE",
+                                  "CRI_Total","CRI_Total_Z","CRI_Total_CATE","CRI_Total_CAT","IDARE_R_PUNTAJE",
                                   "IDARE_R_Z","IDARE_R_CAT","IDARE_E_PUNTAJE","IDARE_E_Z",
                                   "IDARE_E_CAT","IDERE_R_PUNTAJE","IDERE_R_Z","IDERE_R_CAT",
                                   "IDERE_E_PUNTAJE","IDERE_E_Z","IDERE_E_CAT","COVID_CAT",
@@ -116,6 +115,7 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   geom_jitter(size=.2) +
   labs(x = "Age Group", y = "WME/AF") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
 
@@ -125,10 +125,11 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   geom_boxplot() +
   geom_jitter(size=.2) +
   labs(x = "CogFun Group", y = "WME/AF") +
-  ylim (-1, 3) +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
+
 
 
 ### SUPRESION - ESCENAS 
@@ -169,6 +170,23 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO")%>%
   theme_classic()+ 
   theme(text = element_text(size = 17))
 
+filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CATE=="MEDIO")%>%
+  ggplot(aes(x = SUP_ROS_Z, y = value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "SUPPRESSION INDEX", y = "WME/IF") +
+  theme_classic()+ 
+  theme(text = element_text(size = 17))
+
+
+filter(data2, COND== "ESCENAS", TIPO== "Z")%>%
+  ggplot(aes(x = SUP_ROS_Z, y = value, colour= CRI_Total_CATE)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "SUPPRESSION INDEX", y = "WME/IF", color = "CRI_Total_CAT") +
+  theme_classic()+ 
+  theme(text = element_text(size = 17))
+
 filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=EDAD_CAT, fill=EDAD_CAT)) + 
   scale_fill_brewer(palette="BuPu") +
@@ -177,6 +195,7 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !EDAD_CAT=="MEDIO") %>%
   labs(x = "Age Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
 
@@ -188,8 +207,34 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
   labs(x = "CogRes Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
+
+filter(data2, COND== "ESCENAS", TIPO== "Z") %>%
+  ggplot(aes(y=value, x=CRI_Total_CATE, fill=CRI_Total_CATE)) + 
+  scale_fill_brewer(palette="RdPu") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "CogRes Group", y = "WME/IF") +
+  theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","MEDIUM","HIGH")) +
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
+
+filter(data2, COND== "ESCENAS", TIPO== "Z") %>%
+  aov(value ~ SUP_ROS_Z*CRI_Total_CATE, data =.)%>%
+  summary()
+
+filter(data2, COND== "ESCENAS", TIPO== "Z",!CRI_Total_CATE=="LOW") %>%
+  wilcox.test(value ~ CRI_Total_CATE, data =.)
+#0.45
+filter(data2, COND== "ESCENAS", TIPO== "Z",!CRI_Total_CATE=="HIGH") %>%
+  wilcox.test(value ~ CRI_Total_CATE, data =.)
+#0.01
+filter(data2, COND== "ESCENAS", TIPO== "Z",!CRI_Total_CATE=="MEDIUM") %>%
+  wilcox.test(value ~ CRI_Total_CATE, data =.)
+#0.08
 
 filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   ggplot(aes(y=value, x=MoCA_CAT, fill=MoCA_CAT)) + 
@@ -199,9 +244,21 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   labs(x = "CogFun Group", y = "WME/IF") +
   ylim (-1, 3) +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
 
+filter(data3, COND== "ESCENAS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
+  ggplot(aes(y=CRIq_SUP, x= CRI_Total_CAT, fill=CRI_Total_CAT)) + 
+  scale_fill_brewer(palette="RdPu") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "CogRes Group", y = "WME/IF") +
+  ylim (-1, 3) +
+  theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
 
 
 ### ROSTROS 
@@ -237,8 +294,22 @@ filter(data2, COND== "ROSTROS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   geom_jitter(size=.2) +
   labs(x = "CogFun Group", y = "WME/AF") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
+
+filter(data2, COND== "ROSTROS", TIPO== "Z", !CRI_Total_CAT=="MEDIO") %>%
+  ggplot(aes(y=value, x=CRI_Total_CAT, fill=CRI_Total_CAT)) + 
+  scale_fill_brewer(palette="RdPu") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "CogRes Group", y = "WME/AF") +
+  theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
+
+
 
 
 
@@ -276,6 +347,18 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !MoCA_CAT=="MEDIO") %>%
   geom_jitter(size=.2) +
   labs(x = "CogFun Group", y = "WME/IF") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
+
+filter(data2, COND== "ESCENAS", TIPO== "Z", !IDARE_E_CAT=="MEDIO") %>%
+  ggplot(aes(y=value, x=IDARE_E_CAT, fill=IDARE_E_CAT)) + 
+  scale_fill_brewer(palette="BuGn") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "SAnx Group", y = "WME/IF") +
+  theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
 
@@ -284,21 +367,22 @@ filter(data2, COND== "ESCENAS", TIPO== "Z", !IDERE_E_CAT=="MEDIO") %>%
   scale_fill_brewer(palette="YlGn") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "SAnx Group", y = "WME/IF") +
+  labs(x = "SDep Group", y = "WME/IF") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   theme(text = element_text(size = 17))
 
 
 ### AMPLIFIFCACION
 
-ggplot(data = data, aes(x = ESCOLARIDAD, y = AMP_ROS)) +
+ggplot(data = data2, aes(x = ESCOLARIDAD, y = AMP_ROS, colour= ESCOLARIDAD_CAT)) +
   geom_point() + geom_smooth(method = "lm", color = "#5F9EA0", lwd = 1.5) +
   labs(x = "YS", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
   theme(text = element_text(size = 17))
 
-ggplot(data = data, aes(x = CRI_Total, y = AMP_ROS)) +
+ggplot(data = data2, aes(x = CRI_Total, y = AMP_ROS, colour= CRI_Total_CAT)) +
   geom_point() + geom_smooth(method = "lm", color = "#8B5A00", lwd = 1.5) +
   labs(x = "CogRes", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
@@ -310,7 +394,7 @@ ggplot(data = data, aes(x = IDARE_E_PUNTAJE, y = AMP_ROS)) +
   theme_classic() +
   theme(text = element_text(size = 17))
 
-ggplot(data = data, aes(x = IDERE_R_PUNTAJE, y = AMP_ROS)) +
+ggplot(data = data2, aes(x = IDERE_R_PUNTAJE, y = AMP_ROS, colour= IDERE_R_CAT)) +
   geom_point() + geom_smooth(method = "lm", color = "#4A708B", lwd = 1.5) +
   labs(x = "TDep", y = "ENHANCEMENT INDEX") +  
   theme_classic() +
@@ -339,8 +423,8 @@ filter(data2, !ESCOLARIDAD_CAT=="MEDIO") %>%
   geom_jitter(size=.2) +
   labs(x = "YS Group", y = "ENHANCEMENT INDEX") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
-  ylim (-2, 2) +
   theme(text = element_text(size = 17))
 
 filter(data2, !IDARE_E_CAT=="MEDIO") %>%
@@ -350,7 +434,9 @@ filter(data2, !IDARE_E_CAT=="MEDIO") %>%
   geom_jitter(size=.2) +
   labs(x = "SAnx Group", y = "ENHANCEMENT INDEX") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
+  ylim (-2,2) +
   theme(text = element_text(size = 17))
 
 filter(data2, !IDERE_R_CAT=="MEDIO") %>%
@@ -360,20 +446,34 @@ filter(data2, !IDERE_R_CAT=="MEDIO") %>%
   geom_jitter(size=.2) +
   labs(x = "TDep Group", y = "ENHANCEMENT INDEX") +
   theme_classic()+ 
+  scale_x_discrete(limits = c("LOW","HIGH")) +
   theme(legend.position = "none") +
   ylim (-2, 2) +
   theme(text = element_text(size = 17))
 
-filter(data2, !OCUPA_CAT=="MEDIO") %>%
-  ggplot(aes(y=AMP_ROS_Z, x=OCUPA_CAT, fill=OCUPA_CAT)) +
-  scale_fill_brewer(palette="PuBuGn") +
+filter(data2, !CRI_Total_CAT=="MEDIO") %>%
+  ggplot(aes(y=AMP_ROS_Z, x=CRI_Total_CAT, fill=CRI_Total_CAT)) +
+  scale_fill_brewer(palette="RdPu") +
   geom_boxplot() +
   geom_jitter(size=.2) +
-  labs(x = "Occup Group", y = "ENHANCEMENT INDEX") +
+  labs(x = "CogRes Group", y = "ENHANCEMENT INDEX") +
   theme_classic()+ 
   theme(legend.position = "none") +
   ylim (-2, 2) +
   theme(text = element_text(size = 17))
+
+filter(data2, !CRI_Total_CAT=="MEDIO") %>%
+  ggplot(aes(y=AMP_ROS_Z, x=CRI_Total_CAT, fill=CRI_Total_CAT)) + 
+  scale_fill_brewer(palette="RdPu") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "CogRes Group", y = "ENHANCEMENT INDEX") +
+  ylim (-2, 3) +
+  scale_x_discrete(limits = c("LOW","HIGH")) +
+  theme_classic()+ 
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
+
 
 
 ### SUPRESION
@@ -387,7 +487,16 @@ filter(data2, !CRI_Total_CAT=="MEDIO")%>%
   ylim (-2, 2) +
   theme(text = element_text(size = 17))
 
-
+filter(data2, !CRI_Total_CAT=="MEDIO") %>%
+  ggplot(aes(y=SUP_ROS_Z, x=CRI_Total_CAT, fill=CRI_Total_CAT)) + 
+  scale_fill_brewer(palette="RdPu") +
+  geom_boxplot() +
+  geom_jitter(size=.2) +
+  labs(x = "CogRes Group", y = "SUPPRESSION INDEX") +
+  ylim (-1, 3) +
+  theme_classic()+ 
+  theme(legend.position = "none") +
+  theme(text = element_text(size = 17))
 
 
 
